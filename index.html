@@ -24,7 +24,7 @@
   --line-dark:rgba(255,255,255,0.16);
   --radius:2px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;min-width:0}
 html{scrollbar-color:#2FAE5C var(--bg-dark);scrollbar-width:thin}
 ::-webkit-scrollbar{width:12px;height:12px}
 ::-webkit-scrollbar-track{background:var(--bg-dark)}
@@ -38,6 +38,8 @@ body{
   -webkit-font-smoothing:antialiased;
   line-height:1.5;
   overflow-x:hidden;
+  overflow-wrap:break-word;
+  word-break:break-word;
   max-width:100%;
 }
 .display{font-family:'Fraunces',serif}
