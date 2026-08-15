@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Firebase — Africa Vision</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#0B1F35;color:#fff;
+       min-height:100vh;padding:20px;display:flex;justify-content:center}
+  .boite{width:100%;max-width:640px}
+  h1{font-size:19px;font-weight:600;margin-bottom:6px}
+  .sous{font-size:13px;opacity:.65;margin-bottom:22px}
+  .etape{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+         border-radius:6px;padding:14px 16px;margin-bottom:10px}
+  .titre{font-size:14px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .detail{font-size:12.5px;opacity:.8;line-height:1.55;word-break:break-word}
+  .pastille{width:10px;height:10px;border-radius:50%;background:#7a8899;flex-shrink:0}
+  .ok .pastille{background:#2FAE5C}
+  .ko .pastille{background:#E5484D}
+  .attente .pastille{background:#E8A33D;animation:clign 1s infinite}
+  @keyframes clign{50%{opacity:.3}}
+  .verdict{margin-top:18px;padding:16px;border-radius:6px;font-size:14px;line-height:1.6;display:none}
+  .verdict.ok{display:block;background:rgba(47,174,92,.15);border:1px solid #2FAE5C}
+  .verdict.ko{display:block;background:rgba(229,72,77,.15);border:1px solid #E5484D}
+  button{margin-top:18px;width:100%;padding:14px;font-size:15px;font-weight:600;
+         background:#2FAE5C;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit}
+  code{background:rgba(0,0,0,.35);padding:2px 5px;border-radius:3px;font-size:11.5px}
+</style>
+</head>
+<body>
+<div class="boite">
+  <h1>Test de connexion Firebase</h1>
+  <p class="sous">Projet <code>africa-vision-3b38f</code> · collection <code>boutique_test</code></p>
+
+  <div class="etape attente" id="e1">
+    <div class="titre"><span class="pastille"></span>1. La base de données existe-t-elle ?</div>
+    <div class="detail" id="d1">Test en cours…</div>
+  </div>
+
+  <div class="etape attente" id="e2">
+    <div class="titre"><span class="pastille"></span>2. Les règles autorisent-elles la lecture ?</div>
+    <div class="detail" id="d2">En attente</div>
+  </div>
+
+  <div class="etape attente" id="e3">
+    <div class="titre"><span class="pastille"></span>3. L'écriture fonctionne-t-elle ?</div>
+    <div class="detail" id="d3">En attente</div>
+  </div>
+
+  <div class="etape attente" id="e4">
+    <div class="titre"><span class="pastille"></span>4. Peut-on relire ce qui a été écrit ?</div>
+    <div class="detail" id="d4">En attente</div>
+  </div>
+
+  <div class="verdict" id="verdict"></div>
+  <button onclick="location.reload()">Relancer le test</button>
+</div>
+
+<script>
+const PROJET = 'africa-vision-3b38f';
+const BASE = 'https://firestore.googleapis.com/v1/projects/' + PROJET +
+             '/databases/(default)/documents';
+
+function etat(n, statut, texte){
+  const e = document.getElementById('e' + n);
+  e.className = 'etape ' + statut;
+  document.getElementById('d' + n).innerHTML = texte;
+}
+
+function verdict(bon, texte){
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + (bon ? 'ok' : 'ko');
+  v.innerHTML = texte;
+}
+
+async function lancer(){
+
+  /* Avertissement : ouverture en local */
+  if(location.protocol === 'file:'){
+    etat(1,'ko','Vous avez ouvert ce fichier directement depuis votre ordinateur ' +
+      '(adresse en <code>file://</code>). Firestore refuse ces requêtes.<br><br>' +
+      '<b>Déposez ce fichier sur GitHub</b> et ouvrez-le via ' +
+      '<code>africavision140.github.io/BOUTIQUE/test-firebase.html</code>');
+    verdict(false, 'Test impossible en local. Le fichier doit être en ligne.');
+    return;
+  }
+
+  /* --- 1 et 2 : lecture --- */
+  let lectureOk = false;
+  try{
+    const r = await fetch(BASE + '/boutique_test');
+    if(r.ok){
+      etat(1,'ok','La base répond.');
+      etat(2,'ok','Lecture autorisée.');
+      lectureOk = true;
+    } else {
+      const err = await r.json().catch(()=>({}));
+      const msg = (err.error && err.error.message) || ('erreur ' + r.status);
+      if(r.status === 403){
+        etat(1,'ok','La base existe.');
+        etat(2,'ko','<b>Lecture refusée.</b> Les règles Firestore bloquent l\'accès.<br>' +
+          'Console Firebase → Firestore → Règles → vérifiez que <code>allow read, write: if true;</code> ' +
+          'est bien publié.<br><br>Message : ' + msg);
+        verdict(false, 'Firestore existe mais les règles bloquent tout. Corrigez les règles.');
+        return;
+      }
+      if(r.status === 404){
+        etat(1,'ko','<b>Base introuvable.</b> Firestore n\'est pas encore créé sur ce projet.<br>' +
+          'Console Firebase → Firestore Database → <b>Create database</b> → mode <b>Natif</b>, région <code>eur3</code>.');
+        etat(2,'ko','Impossible tant que la base n\'existe pas.');
+        verdict(false, 'La base Firestore n\'existe pas. Créez-la dans la console Firebase.');
+        return;
+      }
+      etat(1,'ko','Réponse inattendue : ' + msg);
+      etat(2,'ko','Non testé.');
+      verdict(false, 'Erreur inattendue : ' + msg);
+      return;
+    }
+  }catch(e){
+    etat(1,'ko','Aucune réponse du serveur. Vérifiez votre connexion Internet.<br>Détail : ' + e.message);
+    etat(2,'ko','Non testé.');
+    verdict(false, 'Pas de connexion à Firestore.');
+    return;
+  }
+
+  /* --- 3 : écriture --- */
+  const marqueur = 'test_' + Date.now();
+  try{
+    const r = await fetch(BASE + '/boutique_test/diagnostic', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ fields: {
+        json: { stringValue: JSON.stringify({ marqueur: marqueur, date: new Date().toISOString() }) }
+      }})
+    });
+    if(r.ok){
+      etat(3,'ok','Écriture réussie.');
+    } else {
+      const err = await r.json().catch(()=>({}));
+      etat(3,'ko','<b>Écriture refusée</b> (' + r.status + ').<br>' +
+        'Les règles autorisent la lecture mais pas l\'écriture.<br>' +
+        'Message : ' + ((err.error && err.error.message) || ''));
+      verdict(false, 'Lecture possible, écriture bloquée. Vérifiez la partie <code>write</code> de vos règles.');
+      return;
+    }
+  }catch(e){
+    etat(3,'ko','Échec : ' + e.message);
+    verdict(false, 'L\'écriture a échoué.');
+    return;
+  }
+
+  /* --- 4 : relecture --- */
+  try{
+    const r = await fetch(BASE + '/boutique_test/diagnostic');
+    const d = await r.json();
+    const contenu = JSON.parse(d.fields.json.stringValue);
+    if(contenu.marqueur === marqueur){
+      etat(4,'ok','Relecture conforme. Marqueur : <code>' + marqueur + '</code>');
+      verdict(true,
+        '<b>Tout fonctionne.</b><br><br>' +
+        'Firestore est opérationnel sur ce projet. La marketplace pourra enregistrer ' +
+        'produits, boutiques et commandes.<br><br>' +
+        'Vérifiez dans la console Firebase : la collection <code>boutique_test</code> ' +
+        'doit être apparue, avec un document <code>diagnostic</code>. ' +
+        'Vous pouvez la supprimer, elle ne sert qu\'à ce test.');
+    } else {
+      etat(4,'ko','Contenu différent de ce qui a été écrit.');
+      verdict(false, 'Incohérence à la relecture.');
+    }
+  }catch(e){
+    etat(4,'ko','Échec : ' + e.message);
+    verdict(false, 'La relecture a échoué.');
+  }
+}
+
+lancer();
+</script>
+</body>
+</html>
