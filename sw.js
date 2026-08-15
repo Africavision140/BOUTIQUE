@@ -3,7 +3,7 @@
    cache-first pour les icônes et polices (rapide et stable).
    ⚠️ INCRÉMENTER CACHE_VERSION à CHAQUE mise en ligne d'une nouvelle version. */
 
-const CACHE_VERSION = 'av-v8';
+const CACHE_VERSION = 'av-v12';
 const CORE_CACHE = CACHE_VERSION + '-core';
 const ASSET_CACHE = CACHE_VERSION + '-assets';
 
