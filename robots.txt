@@ -1,7 +1,7 @@
 # Africa Vision — Marketplace
-# Adresse actuelle : africavision140.github.io/boutique/
+# Adresse actuelle : africavision140.github.io/BOUTIQUE/
 
 User-agent: *
 Allow: /
 
-Sitemap: https://africavision140.github.io/boutique/sitemap.xml
+Sitemap: https://africavision140.github.io/BOUTIQUE/sitemap.xml
