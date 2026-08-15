@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.15-g
+  VERSION : v2026.08.15-h
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -825,7 +825,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-g</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-h</span></span>
   </div>
 </footer>
 
@@ -1211,6 +1211,215 @@ function fbCollection(cle){ return 'boutique_' + cle; }
 function fbEncodeId(cle){
   const b64 = btoa(unescape(encodeURIComponent(String(cle))));
   return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function fbDecodeId(id){
+  let b64 = id.replace(/-/g, '+').replace(/_/g, '/');
+  while(b64.length % 4) b64 += '=';
+  try{ return decodeURIComponent(escape(atob(b64))); }catch(e){ return id; }
+}
+
+/* Copie locale, utilisée si le réseau est coupé */
+function fbCacheEcrire(cle, valeur){
+  try{
+    const texte = JSON.stringify(valeur);
+    /* Au-delà de 2 Mo, le navigateur refuse : inutile d'insister */
+    if(texte.length > 2000000) return;
+    localStorage.setItem('av_cache_' + cle, texte);
+  }catch(e){}
+}
+function fbCacheLire(cle){
+  try{ const v = localStorage.getItem('av_cache_' + cle); return v ? JSON.parse(v) : null; }
+  catch(e){ return null; }
+}
+
+function fbSignalerHorsLigne(){
+  if(_fbHorsLigne) return;
+  _fbHorsLigne = true;
+  if(typeof showToast === 'function'){
+    showToast("Connexion perdue — affichage de la dernière version enregistrée");
+  }
+}
+function fbSignalerEnLigne(){
+  if(!_fbHorsLigne) return;
+  _fbHorsLigne = false;
+  if(typeof showToast === 'function') showToast("Connexion rétablie");
+}
+
+/* ---------- Appels REST ---------- */
+async function fbLireDocument(collection, docId){
+  const r = await fetch(FB_BASE + '/' + collection + '/' + docId);
+  if(r.status === 404) return null;
+  if(!r.ok) throw new Error('Firestore ' + r.status);
+  const d = await r.json();
+  const brut = d.fields && d.fields.json ? d.fields.json.stringValue : null;
+  return brut ? JSON.parse(brut) : null;
+}
+
+async function fbListerDocuments(collection){
+  const resultats = [];
+  let token = null;
+  do{
+    let url = FB_BASE + '/' + collection + '?pageSize=300';
+    if(token) url += '&pageToken=' + encodeURIComponent(token);
+    const r = await fetch(url);
+    if(r.status === 404) break;
+    if(!r.ok) throw new Error('Firestore ' + r.status);
+    const d = await r.json();
+    (d.documents || []).forEach(doc => {
+      const id = doc.name.split('/').pop();
+      const brut = doc.fields && doc.fields.json ? doc.fields.json.stringValue : null;
+      if(brut){
+        const rang = doc.fields && doc.fields.rang ? parseInt(doc.fields.rang.integerValue, 10) : null;
+        try{ resultats.push({ id: id, valeur: JSON.parse(brut), rang: rang }); }catch(e){}
+      }
+    });
+    token = d.nextPageToken || null;
+  } while(token);
+  return resultats;
+}
+
+async function fbEcrireDocument(collection, docId, valeur, position){
+  const champs = { json: { stringValue: JSON.stringify(valeur) } };
+  if(position !== undefined) champs.rang = { integerValue: String(position) };
+  const r = await fetch(FB_BASE + '/' + collection + '/' + docId, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: champs })
+  });
+  if(!r.ok) throw new Error('Firestore écriture ' + r.status);
+}
+
+async function fbSupprimerDocument(collection, docId){
+  const r = await fetch(FB_BASE + '/' + collection + '/' + docId, { method: 'DELETE' });
+  if(!r.ok && r.status !== 404) throw new Error('Firestore suppression ' + r.status);
+}
+
+/* ---------- Interface utilisée par le reste du site ---------- */
+async function safeGet(cle, shared = false){
+  /* Données privées : elles restent sur l'appareil */
+  if(!shared){
+    try{
+      const v = localStorage.getItem('av_' + cle);
+      return v ? JSON.parse(v) : null;
+    }catch(e){ return null; }
+  }
+
+  const collection = fbCollection(cle);
+  try{
+    let valeur;
+
+    if(FB_SIMPLE.includes(cle)){
+      valeur = await fbLireDocument(collection, 'valeur');
+      if(valeur !== null) _fbSnapshot[cle] = JSON.stringify(valeur);
+    }
+    else if(FB_LISTES.includes(cle)){
+      const docs = await fbListerDocuments(collection);
+      if(docs.length === 0){ fbSignalerEnLigne(); return null; }
+      docs.sort((a,b)=>{
+        if(a.rang === null && b.rang === null) return 0;
+        if(a.rang === null) return 1;
+        if(b.rang === null) return -1;
+        return a.rang - b.rang;
+      });
+      valeur = docs.map(d => d.valeur);
+      const carte = {};
+      docs.forEach(d => { carte[d.id] = JSON.stringify(d.valeur); });
+      _fbSnapshot[cle] = carte;
+    }
+    else if(FB_DICTS.includes(cle)){
+      const docs = await fbListerDocuments(collection);
+      if(docs.length === 0){ fbSignalerEnLigne(); return null; }
+      valeur = {};
+      const carte = {};
+      docs.forEach(d => {
+        valeur[fbDecodeId(d.id)] = d.valeur;
+        carte[d.id] = JSON.stringify(d.valeur);
+      });
+      _fbSnapshot[cle] = carte;
+    }
+    else{
+      valeur = await fbLireDocument(collection, 'valeur');
+    }
+
+    fbSignalerEnLigne();
+    if(valeur !== null && valeur !== undefined) fbCacheEcrire(cle, valeur);
+    window.__origine = window.__origine || {};
+    window.__origine[cle] = (valeur === null ? 'vide (Firestore)' : 'Firestore');
+    console.log('[Firestore] ' + cle + ' : ' + window.__origine[cle] +
+                (Array.isArray(valeur) ? ' — ' + valeur.length + ' élément(s)' : ''));
+    return valeur;
+
+  }catch(e){
+    console.warn('[Firestore] lecture ' + cle + ' impossible :', e.message);
+    fbSignalerHorsLigne();
+    const secours = fbCacheLire(cle);
+    window.__origine = window.__origine || {};
+    window.__origine[cle] = secours ? 'copie locale' : 'échec (' + e.message + ')';
+    console.log('[Firestore] ' + cle + ' : ' + window.__origine[cle]);
+    return secours;
+  }
+}
+
+async function safeSet(cle, valeur, shared = false){
+  /* Données privées : elles restent sur l'appareil */
+  if(!shared){
+    try{
+      if(valeur === null || valeur === undefined) localStorage.removeItem('av_' + cle);
+      else localStorage.setItem('av_' + cle, JSON.stringify(valeur));
+    }catch(e){ console.warn('[Local] écriture ' + cle + ' impossible'); }
+    return;
+  }
+
+  const collection = fbCollection(cle);
+  fbCacheEcrire(cle, valeur);
+
+  try{
+    /* --- Petit document unique --- */
+    if(FB_SIMPLE.includes(cle) || (!FB_LISTES.includes(cle) && !FB_DICTS.includes(cle))){
+      const texte = JSON.stringify(valeur);
+      if(_fbSnapshot[cle] === texte) return;          // rien n'a changé
+      await fbEcrireDocument(collection, 'valeur', valeur);
+      _fbSnapshot[cle] = texte;
+      fbSignalerEnLigne();
+      return;
+    }
+
+    /* --- Liste ou dictionnaire : on n'envoie que les écarts --- */
+    const nouveau = {};
+    const positions = {};
+    if(FB_LISTES.includes(cle)){
+      (valeur || []).forEach((item, i) => {
+        const id = fbEncodeId(item && item.id != null ? item.id : 'auto_' + i);
+        nouveau[id] = JSON.stringify(item);
+        positions[id] = i;
+      });
+    }else{
+      Object.keys(valeur || {}).forEach(k => {
+        nouveau[fbEncodeId(k)] = JSON.stringify(valeur[k]);
+      });
+    }
+
+    const ancien = _fbSnapshot[cle] || {};
+    const aEcrire = Object.keys(nouveau).filter(id => ancien[id] !== nouveau[id]);
+    const aEffacer = Object.keys(ancien).filter(id => !(id in nouveau));
+
+    for(const id of aEcrire){
+      await fbEcrireDocument(collection, id, JSON.parse(nouveau[id]), positions[id]);
+    }
+    for(const id of aEffacer){
+      await fbSupprimerDocument(collection, id);
+    }
+
+    _fbSnapshot[cle] = nouveau;
+    fbSignalerEnLigne();
+
+  }catch(e){
+    console.error('[Firestore] écriture ' + cle + ' échouée :', e.message);
+    fbSignalerHorsLigne();
+    if(typeof showToast === 'function'){
+      showToast("Enregistrement impossible — vérifiez votre connexion");
+    }
+  }
 }
 
 
@@ -3392,7 +3601,7 @@ function closeAll(){
   document.getElementById('pmodal').classList.remove('open');
 }
 
-console.log('%cAfrica Vision Marketplace v2026.08.15-g', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.15-h', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
