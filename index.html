@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.15-f
+  VERSION : v2026.08.15-g
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -825,7 +825,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-f</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-g</span></span>
   </div>
 </footer>
 
@@ -1227,6 +1227,36 @@ async function initData(){
     }, 1200);
   }
   products = stored;
+
+  /* --------------------------------------------------------------------
+     RÉPARATION DES PHOTOS
+     Les produits du catalogue d'origine désignent leurs photos par une
+     clé (par exemple 'car1-black'), et les images elles-mêmes vivent dans
+     l'objet IMG de ce fichier. Si un produit revient de la base sans sa
+     liste d'images, on la lui rend à partir du catalogue d'origine.
+     -------------------------------------------------------------------- */
+  const SEED_PAR_ID = {};
+  SEED_PRODUCTS.forEach(function(p){ SEED_PAR_ID[p.id] = p; });
+
+  let reparees = 0;
+  products.forEach(function(p){
+    const origine = SEED_PAR_ID[p.id];
+    if(origine && origine.images && (!p.images || p.images.length === 0)){
+      p.images = origine.images.slice();
+      reparees++;
+    }
+  });
+
+  /* Produits d'origine absents de la base : on les réaffiche */
+  const presents = {};
+  products.forEach(function(p){ presents[p.id] = true; });
+  const manquants = SEED_PRODUCTS.filter(function(p){ return !presents[p.id]; });
+  if(manquants.length > 0 && products.length > 0){
+    products = products.concat(manquants);
+    console.warn('[Catalogue] ' + manquants.length + ' produit(s) d\'origine réintégré(s)');
+  }
+  if(reparees > 0) console.warn('[Catalogue] photos réparées sur ' + reparees + ' produit(s)');
+  console.log('[Catalogue] ' + products.length + ' produits affichés');
 
   cart = (await safeGet('cart', false)) || {};
   account = await safeGet('account', false);
@@ -3362,7 +3392,7 @@ function closeAll(){
   document.getElementById('pmodal').classList.remove('open');
 }
 
-console.log('%cAfrica Vision Marketplace v2026.08.15-f', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.15-g', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
