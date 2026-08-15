@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.15-e
+  VERSION : v2026.08.15-f
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -825,7 +825,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-e</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-f</span></span>
   </div>
 </footer>
 
@@ -1218,7 +1218,13 @@ async function initData(){
   let stored = await safeGet('products', true);
   if(!stored){
     stored = SEED_PRODUCTS;
-    await safeSet('products', stored, true);
+    /* On n'attend PAS : la boutique s'affiche tout de suite et le catalogue
+       d'origine part vers Firestore pendant ce temps. */
+    setTimeout(function(){
+      safeSet('products', SEED_PRODUCTS, true).then(function(){
+        console.log('[Firestore] catalogue initial enregistré');
+      });
+    }, 1200);
   }
   products = stored;
 
@@ -1347,6 +1353,7 @@ function money(n){
 }
 function showToast(msg){
   const t = document.getElementById('toast');
+  if(!t){ console.log('[info]', msg); return; }
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(window._toastTimer);
@@ -3355,29 +3362,68 @@ function closeAll(){
   document.getElementById('pmodal').classList.remove('open');
 }
 
-console.log('%cAfrica Vision Marketplace v2026.08.15-e', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.15-f', 'font-weight:bold');
 
-/* Démarrage : on attend Firestore avant d'afficher la boutique */
+/* =====================================================================
+   DÉMARRAGE
+   ---------------------------------------------------------------------
+   On attend Firestore, mais jamais indéfiniment : au bout de 20 secondes
+   la boutique s'affiche quand même, avec ce qui a pu être chargé.
+   En cas d'erreur, le message exact est affiché à l'écran — c'est lui
+   qu'il faut communiquer pour diagnostiquer.
+   ===================================================================== */
 (async function demarrer(){
   const ecran = document.getElementById('bootScreen');
   const message = document.getElementById('bootMsg');
+  let termine = false;
+
+  function afficherBoutique(){
+    if(termine) return;
+    termine = true;
+    if(ecran){
+      ecran.style.opacity = '0';
+      setTimeout(function(){ ecran.remove(); }, 400);
+    }
+  }
+
+  /* Message d'attente si la connexion traîne */
   const lent = setTimeout(function(){
-    if(message) message.textContent = "Connexion lente — chargement en cours…";
+    if(message && !termine) message.textContent = "Connexion lente — chargement en cours…";
   }, 6000);
+
+  /* Filet de sécurité : on n'immobilise jamais l'utilisateur */
+  const secours = setTimeout(function(){
+    if(!termine){
+      console.warn('[Démarrage] délai dépassé, affichage forcé');
+      afficherBoutique();
+      showToast("Connexion lente — certaines données peuvent manquer");
+    }
+  }, 20000);
 
   try{
     await initData();
+    clearTimeout(lent); clearTimeout(secours);
+    afficherBoutique();
   }catch(e){
-    console.error('[Démarrage] échec :', e);
-    if(message) message.textContent = "Impossible de charger les données. Vérifiez votre connexion, puis rechargez la page.";
-    clearTimeout(lent);
-    return;
-  }
+    clearTimeout(lent); clearTimeout(secours);
+    console.error('[Démarrage] erreur :', e);
 
-  clearTimeout(lent);
-  if(ecran){
-    ecran.style.opacity = '0';
-    setTimeout(function(){ ecran.remove(); }, 400);
+    /* On affiche l'erreur réelle, avec un bouton pour continuer malgré tout */
+    if(message){
+      message.innerHTML =
+        '<div style="max-width:460px;margin:0 auto;text-align:left">' +
+        '<div style="font-weight:600;margin-bottom:10px;color:#B3261E">Le chargement a échoué</div>' +
+        '<div style="font-size:12.5px;line-height:1.6;margin-bottom:14px">Message d\'erreur exact :</div>' +
+        '<div style="font-family:monospace;font-size:11.5px;background:rgba(0,0,0,.06);padding:10px;' +
+        'border-radius:4px;word-break:break-word;margin-bottom:16px">' +
+        String(e && e.message ? e.message : e) + '</div>' +
+        '<button onclick="document.getElementById(\'bootScreen\').remove()" ' +
+        'style="width:100%;padding:12px;font-size:14px;font-weight:600;background:var(--ember);' +
+        'color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:inherit">' +
+        'Ouvrir la boutique quand même</button></div>';
+    }
+    /* Au bout de 8 secondes, on ouvre de toute façon */
+    setTimeout(afficherBoutique, 8000);
   }
 })();
 
