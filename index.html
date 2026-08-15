@@ -3,7 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Africa Vision — Marketplace</title>
+<title>Africa Vision — Marketplace en Guinée | Véhicules, électronique, mode</title>
+
+<!-- ===================================================================
+     Adresse actuelle : africavision140.github.io/BOUTIQUE/
+     Le jour où vous prenez un vrai domaine, remplacez cette adresse
+     partout dans ce bloc, puis dans sitemap.xml et robots.txt.
+     =================================================================== -->
+
+<!-- ---------- Référencement Google ---------- -->
+<meta name="description" content="Marketplace en Guinée : véhicules importés, électronique, mode, maison, beauté et sport. Vendeurs vérifiés, paiement Orange Money et MTN MoMo, livraison à Conakry.">
+<meta name="keywords" content="marketplace Guinée, voiture occasion Conakry, achat en ligne Guinée, vendeur en ligne Conakry, véhicule importé Chine Guinée">
+<meta name="author" content="Africa Vision">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://africavision140.github.io/BOUTIQUE/">
+
+<!-- ---------- Partage WhatsApp / Facebook ---------- -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Africa Vision">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Africa Vision — Marketplace en Guinée">
+<meta property="og:description" content="Véhicules, électronique, mode, maison, beauté et sport. Vendeurs vérifiés, livraison à Conakry.">
+<meta property="og:url" content="https://africavision140.github.io/BOUTIQUE/">
+<meta property="og:image" content="https://africavision140.github.io/BOUTIQUE/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Africa Vision — Marketplace en Guinée">
+<meta name="twitter:description" content="Véhicules, électronique, mode, maison, beauté et sport. Vendeurs vérifiés, livraison à Conakry.">
+<meta name="twitter:image" content="https://africavision140.github.io/BOUTIQUE/og-image.jpg">
+
+<!-- ---------- Fiche entreprise pour Google ---------- -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "OnlineStore",
+  "name": "Africa Vision",
+  "description": "Marketplace multi-catégories en Guinée : véhicules, électronique, mode, maison, beauté et sport.",
+  "url": "https://africavision140.github.io/BOUTIQUE/",
+  "logo": "https://africavision140.github.io/BOUTIQUE/og-image.jpg",
+  "telephone": ["+224625813646", "+224612398318"],
+  "email": "contact@visionafrica-boutique.fr",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Sonfonia T7",
+    "addressLocality": "Conakry",
+    "addressCountry": "GN"
+  },
+  "currenciesAccepted": "GNF, EUR, USD, RMB, XOF",
+  "paymentAccepted": "Orange Money, MTN Mobile Money, Wave, Moov Money",
+  "areaServed": { "@type": "Country", "name": "Guinée" }
+}
+</script>
+
+<!-- ---------- Application installable (PWA) ---------- -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1F35">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Africa Vision">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -131,6 +192,8 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 
 .icon-btn{position:relative;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;letter-spacing:0.02em;color:#fff;background:var(--ember);padding:9px 16px;border-radius:20px;transition:background .15s ease}
 .icon-btn:hover{background:var(--amber)}
+.icon-btn-install{background:transparent;color:var(--ember);border:1px solid var(--ember)}
+.icon-btn-install:hover{background:var(--ember);color:#fff}
 .icon-btn-admin{background:var(--ember)}
 .icon-btn-admin:hover{background:var(--amber)}
 @media(max-width:1040px){.icon-btn-admin{display:none}}
@@ -196,7 +259,7 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 /* signature flame element */
 .flame-stage{position:relative;height:260px;display:flex;align-items:center;justify-content:center}
 .hero-photo-frame{
-  width:300px;max-width:100%;height:200px;border-radius:6px;overflow:hidden;position:relative;
+  width:300px;height:200px;border-radius:6px;overflow:hidden;position:relative;
   box-shadow:0 30px 70px -20px rgba(0,0,0,0.6);border:1px solid var(--line-dark);
   background:var(--bg-dark-2);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
@@ -343,7 +406,7 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 .overlay{position:fixed;inset:0;background:rgba(28,26,23,0.55);z-index:100;opacity:0;pointer-events:none;transition:opacity .25s ease}
 .overlay.open{opacity:1;pointer-events:auto}
 .drawer{
-  position:fixed;top:0;right:0;height:100%;width:420px;max-width:100vw;background:var(--cream);z-index:101;
+  position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;background:var(--cream);z-index:101;
   transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;
 }
 .drawer.open{transform:translateX(0)}
@@ -352,11 +415,6 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 .close-x{font-size:20px;color:var(--text-muted);line-height:1}
 .drawer-body{flex:1;overflow-y:auto;padding:20px 26px}
 .drawer-foot{padding:20px 26px;border-top:1px solid var(--line)}
-@media(max-width:420px){
-  .drawer-head{padding:16px 16px}
-  .drawer-body{padding:14px 16px}
-  .drawer-foot{padding:14px 16px}
-}
 
 /* Panier + tunnel de commande : fond coloré du panier jusqu'à la validation */
 #cartDrawer, #checkoutDrawer{
@@ -409,13 +467,11 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 .pm-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .pm-thumb.active{border-color:var(--amber);opacity:1}
 .pmodal-info{padding:36px 34px;position:relative}
-@media(max-width:640px){.pmodal-info{padding:22px 18px 26px}.pmodal-info h2{font-size:22px}}
 .pmodal .close-x{position:absolute;top:16px;right:20px;z-index:3}
 .pmodal-info .eyebrow{color:var(--amber);margin-bottom:14px}
 .pmodal-info h2{font-family:'Fraunces',serif;font-size:28px;font-weight:500}
 .pmodal-info .scent{color:var(--ember);font-weight:500;margin-top:6px;font-size:14px}
 .spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
-@media(max-width:420px){.spec-grid{grid-template-columns:repeat(2,1fr)}}
 .spec-grid div{font-size:13.5px}
 .spec-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px}
 .pmodal-info .desc{margin-top:18px;font-size:14px;line-height:1.7;color:#fff;background:var(--amber);border-left:3px solid var(--ember);padding:14px 16px;border-radius:0 4px 4px 0}
@@ -431,26 +487,8 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 }
 .field input:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:transparent}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:360px){.field-row{grid-template-columns:1fr}}
-
-/* Sélecteur de pays avec recherche */
-.country-picker{position:relative}
-.country-picker-input{
-  width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;font-size:14px;font-family:inherit;
-  background:#fff;color:var(--text-dark);
-}
-.country-picker-input:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:transparent}
-.country-picker-list{
-  display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--line);
-  border-radius:6px;box-shadow:0 14px 32px -12px rgba(0,0,0,0.3);z-index:60;max-height:220px;overflow-y:auto;
-}
-.country-picker-list.open{display:block}
-.country-picker-item{padding:9px 12px;font-size:13.5px;cursor:pointer}
-.country-picker-item:hover{background:var(--cream-2)}
-.country-picker-empty{padding:12px;font-size:12.5px;color:var(--text-muted)}
-.step-tabs{display:flex;gap:0;margin-bottom:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.05em;flex-wrap:wrap;row-gap:6px}
+.step-tabs{display:flex;gap:0;margin-bottom:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.05em}
 .step-tab{padding:6px 0;margin-right:20px;color:var(--text-muted);border-bottom:2px solid transparent}
-@media(max-width:360px){.step-tabs{font-size:10px}.step-tab{margin-right:12px}}
 .step-tab.active{color:var(--text-dark);border-color:var(--amber)}
 .step-tab.done{color:var(--sage)}
 
@@ -540,6 +578,11 @@ footer li{margin-bottom:9px}
 </style>
 </head>
 <body>
+<div id="bootScreen" style="position:fixed;inset:0;z-index:9999;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .35s ease">
+  <div style="width:64px;height:64px;border:3px solid rgba(11,31,53,0.15);border-top-color:var(--ember);border-radius:50%;animation:bootspin .9s linear infinite"></div>
+  <div style="font-family:'Inter',sans-serif;font-size:14px;color:var(--text-muted);text-align:center;padding:0 24px" id="bootMsg">Chargement du catalogue…</div>
+  <style>@keyframes bootspin{to{transform:rotate(360deg)}}</style>
+</div>
 
 <div class="promo-bar">
   <div class="promo-track" id="promoTrack">
@@ -586,6 +629,10 @@ footer li{margin-bottom:9px}
       </select>
       <button class="icon-btn" onclick="openSeller()" id="sellerBtn" data-i18n="nav_seller">Espace vendeur</button>
       <button class="icon-btn" onclick="openAccount()" id="accountBtn" data-i18n="nav_account">Compte</button>
+      <button class="icon-btn icon-btn-install" id="installBtn" onclick="installApp()" style="display:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
+        <span>Installer</span>
+      </button>
       <button class="icon-btn" onclick="openCart()">
         <span data-i18n="nav_cart">Panier</span> <span class="cart-count" id="cartCount" style="display:none">0</span>
       </button>
@@ -655,7 +702,9 @@ footer li{margin-bottom:9px}
       Chaque produit est vérifié avant d'entrer en catalogue, qu'il s'agisse d'un véhicule, d'un article de mode ou d'un appareil électronique. Rien n'est publié sans contrôle préalable par notre équipe ou le vendeur partenaire.
     </p>
     <div class="contact-block">
-      <div class="contact-item"><span class="contact-icon">📞</span>+224 625 81 36 46</div>
+      <div class="contact-item"><span class="contact-icon">📞</span><a href="tel:+224625813646">+224 625 81 36 46</a></div>
+      <div class="contact-item"><span class="contact-icon">📞</span><a href="tel:+224612398318">+224 612 39 83 18</a></div>
+      <div class="contact-item"><span class="contact-icon">💬</span><a href="https://wa.me/224612398318?text=Bonjour%2C%20je%20vous%20contacte%20depuis%20le%20site%20Africa%20Vision" target="_blank" rel="noopener">WhatsApp · 612 39 83 18</a></div>
       <div class="contact-item"><span class="contact-icon">✉️</span>contact@visionafrica-boutique.fr</div>
       <div class="contact-item"><span class="contact-icon">📍</span>Sonfonia T7, Conakry, Guinée</div>
     </div>
@@ -682,7 +731,9 @@ footer li{margin-bottom:9px}
     <div>
       <h4 data-i18n="footer_contact">Contact</h4>
       <ul>
-        <li>📞 +224 625 81 36 46</li>
+        <li>📞 <a href="tel:+224625813646">+224 625 81 36 46</a></li>
+        <li>📞 <a href="tel:+224612398318">+224 612 39 83 18</a></li>
+        <li>💬 <a href="https://wa.me/224612398318" target="_blank" rel="noopener">WhatsApp · 612 39 83 18</a></li>
         <li>✉️ contact@visionafrica-boutique.fr</li>
         <li>📍 Sonfonia T7, Conakry, Guinée</li>
       </ul>
@@ -690,7 +741,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span>Paiement simulé — aucune transaction réelle</span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé</span>
   </div>
 </footer>
 
@@ -1017,13 +1068,263 @@ let activeCategory = 'Toutes';
 let activeShopId = null;
 
 /* ================= STORAGE HELPERS ================= */
-async function safeGet(key, shared=false){
-  try{ const r = await window.storage.get(key, shared); return r ? JSON.parse(r.value) : null; }
+/* =====================================================================
+   STOCKAGE — FIRESTORE (API REST, sans SDK)
+   ---------------------------------------------------------------------
+   Projet Firebase : africa-vision-3b38f
+   Toutes les collections sont préfixées « boutique_ » pour ne pas
+   entrer en conflit avec vos autres plateformes du même projet.
+
+   RÉPARTITION DES DONNÉES
+   -----------------------
+   • Données PARTAGÉES (shared = true)  -> Firestore, visibles par tous
+       produits, boutiques, commandes, avis, messages, réglages
+   • Données PRIVÉES (shared = false)   -> mémoire du navigateur
+       panier, compte client, langue, devise
+     (elles restent sur l'appareil du visiteur, comme avant)
+
+   POURQUOI UN DOCUMENT PAR ARTICLE
+   --------------------------------
+   Firestore limite chaque document à 1 Mo. Une photo compressée pèse
+   environ 80 Ko : un seul document contenant tous les produits serait
+   dépassé dès la vingtième fiche. Chaque produit, boutique, commande
+   ou conversation a donc son propre document.
+
+   ÉCRITURES INTELLIGENTES
+   -----------------------
+   Le code appelle safeSet('products', products) avec la liste entière
+   après chaque modification. Plutôt que de réécrire les 45 fiches,
+   on compare avec la version précédente et on n'envoie que ce qui a
+   réellement changé. Sur une connexion lente, la différence est nette.
+
+   MODE HORS LIGNE
+   ---------------
+   Chaque lecture réussie est copiée dans le navigateur. Si le réseau
+   tombe, le site affiche la dernière version connue au lieu d'une page
+   vide, et prévient l'utilisateur.
+   ===================================================================== */
+
+const FB_PROJECT = 'africa-vision-3b38f';
+const FB_BASE = 'https://firestore.googleapis.com/v1/projects/' + FB_PROJECT +
+                '/databases/(default)/documents';
+
+/* Clés stockées comme une liste d'objets possédant un champ id */
+const FB_LISTES = ['products', 'shops', 'allOrders', 'withdrawals', 'broadcasts'];
+/* Clés stockées comme un dictionnaire : { identifiant : contenu } */
+const FB_DICTS  = ['reviews', 'shopStats', 'chats'];
+/* Clés tenant dans un seul petit document */
+const FB_SIMPLE = ['commissionSettings', 'adSettings', 'videoAdSettings', 'extraCategories', 'announcements'];
+
+/* Mémoire de la dernière version écrite, pour ne renvoyer que les écarts */
+const _fbSnapshot = {};
+let _fbHorsLigne = false;
+
+/* ---------- Outils ---------- */
+function fbCollection(cle){ return 'boutique_' + cle; }
+
+/* Un identifiant de document ne tolère ni /, ni ::, ni accents.
+   On encode donc la clé d'origine en base64 compatible URL. */
+function fbEncodeId(cle){
+  const b64 = btoa(unescape(encodeURIComponent(String(cle))));
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function fbDecodeId(id){
+  let b64 = id.replace(/-/g, '+').replace(/_/g, '/');
+  while(b64.length % 4) b64 += '=';
+  try{ return decodeURIComponent(escape(atob(b64))); }catch(e){ return id; }
+}
+
+/* Copie locale, utilisée si le réseau est coupé */
+function fbCacheEcrire(cle, valeur){
+  try{ localStorage.setItem('av_cache_' + cle, JSON.stringify(valeur)); }catch(e){}
+}
+function fbCacheLire(cle){
+  try{ const v = localStorage.getItem('av_cache_' + cle); return v ? JSON.parse(v) : null; }
   catch(e){ return null; }
 }
-async function safeSet(key, value, shared=false){
-  try{ await window.storage.set(key, JSON.stringify(value), shared); }catch(e){ console.error('storage set failed', e); }
+
+function fbSignalerHorsLigne(){
+  if(_fbHorsLigne) return;
+  _fbHorsLigne = true;
+  if(typeof showToast === 'function'){
+    showToast("Connexion perdue — affichage de la dernière version enregistrée");
+  }
 }
+function fbSignalerEnLigne(){
+  if(!_fbHorsLigne) return;
+  _fbHorsLigne = false;
+  if(typeof showToast === 'function') showToast("Connexion rétablie");
+}
+
+/* ---------- Appels REST ---------- */
+async function fbLireDocument(collection, docId){
+  const r = await fetch(FB_BASE + '/' + collection + '/' + docId);
+  if(r.status === 404) return null;
+  if(!r.ok) throw new Error('Firestore ' + r.status);
+  const d = await r.json();
+  const brut = d.fields && d.fields.json ? d.fields.json.stringValue : null;
+  return brut ? JSON.parse(brut) : null;
+}
+
+async function fbListerDocuments(collection){
+  const resultats = [];
+  let token = null;
+  do{
+    let url = FB_BASE + '/' + collection + '?pageSize=300';
+    if(token) url += '&pageToken=' + encodeURIComponent(token);
+    const r = await fetch(url);
+    if(r.status === 404) break;
+    if(!r.ok) throw new Error('Firestore ' + r.status);
+    const d = await r.json();
+    (d.documents || []).forEach(doc => {
+      const id = doc.name.split('/').pop();
+      const brut = doc.fields && doc.fields.json ? doc.fields.json.stringValue : null;
+      if(brut){
+        const rang = doc.fields && doc.fields.rang ? parseInt(doc.fields.rang.integerValue, 10) : null;
+        try{ resultats.push({ id: id, valeur: JSON.parse(brut), rang: rang }); }catch(e){}
+      }
+    });
+    token = d.nextPageToken || null;
+  } while(token);
+  return resultats;
+}
+
+async function fbEcrireDocument(collection, docId, valeur, position){
+  const champs = { json: { stringValue: JSON.stringify(valeur) } };
+  if(position !== undefined) champs.rang = { integerValue: String(position) };
+  const r = await fetch(FB_BASE + '/' + collection + '/' + docId, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: champs })
+  });
+  if(!r.ok) throw new Error('Firestore écriture ' + r.status);
+}
+
+async function fbSupprimerDocument(collection, docId){
+  const r = await fetch(FB_BASE + '/' + collection + '/' + docId, { method: 'DELETE' });
+  if(!r.ok && r.status !== 404) throw new Error('Firestore suppression ' + r.status);
+}
+
+/* ---------- Interface utilisée par le reste du site ---------- */
+async function safeGet(cle, shared = false){
+  /* Données privées : elles restent sur l'appareil */
+  if(!shared){
+    try{
+      const v = localStorage.getItem('av_' + cle);
+      return v ? JSON.parse(v) : null;
+    }catch(e){ return null; }
+  }
+
+  const collection = fbCollection(cle);
+  try{
+    let valeur;
+
+    if(FB_SIMPLE.includes(cle)){
+      valeur = await fbLireDocument(collection, 'valeur');
+      if(valeur !== null) _fbSnapshot[cle] = JSON.stringify(valeur);
+    }
+    else if(FB_LISTES.includes(cle)){
+      const docs = await fbListerDocuments(collection);
+      if(docs.length === 0){ fbSignalerEnLigne(); return null; }
+      docs.sort((a,b)=>{
+        if(a.rang === null && b.rang === null) return 0;
+        if(a.rang === null) return 1;
+        if(b.rang === null) return -1;
+        return a.rang - b.rang;
+      });
+      valeur = docs.map(d => d.valeur);
+      const carte = {};
+      docs.forEach(d => { carte[d.id] = JSON.stringify(d.valeur); });
+      _fbSnapshot[cle] = carte;
+    }
+    else if(FB_DICTS.includes(cle)){
+      const docs = await fbListerDocuments(collection);
+      if(docs.length === 0){ fbSignalerEnLigne(); return null; }
+      valeur = {};
+      const carte = {};
+      docs.forEach(d => {
+        valeur[fbDecodeId(d.id)] = d.valeur;
+        carte[d.id] = JSON.stringify(d.valeur);
+      });
+      _fbSnapshot[cle] = carte;
+    }
+    else{
+      valeur = await fbLireDocument(collection, 'valeur');
+    }
+
+    fbSignalerEnLigne();
+    if(valeur !== null && valeur !== undefined) fbCacheEcrire(cle, valeur);
+    return valeur;
+
+  }catch(e){
+    console.warn('[Firestore] lecture ' + cle + ' impossible :', e.message);
+    fbSignalerHorsLigne();
+    return fbCacheLire(cle);
+  }
+}
+
+async function safeSet(cle, valeur, shared = false){
+  /* Données privées : elles restent sur l'appareil */
+  if(!shared){
+    try{
+      if(valeur === null || valeur === undefined) localStorage.removeItem('av_' + cle);
+      else localStorage.setItem('av_' + cle, JSON.stringify(valeur));
+    }catch(e){ console.warn('[Local] écriture ' + cle + ' impossible'); }
+    return;
+  }
+
+  const collection = fbCollection(cle);
+  fbCacheEcrire(cle, valeur);
+
+  try{
+    /* --- Petit document unique --- */
+    if(FB_SIMPLE.includes(cle) || (!FB_LISTES.includes(cle) && !FB_DICTS.includes(cle))){
+      const texte = JSON.stringify(valeur);
+      if(_fbSnapshot[cle] === texte) return;          // rien n'a changé
+      await fbEcrireDocument(collection, 'valeur', valeur);
+      _fbSnapshot[cle] = texte;
+      fbSignalerEnLigne();
+      return;
+    }
+
+    /* --- Liste ou dictionnaire : on n'envoie que les écarts --- */
+    const nouveau = {};
+    const positions = {};
+    if(FB_LISTES.includes(cle)){
+      (valeur || []).forEach((item, i) => {
+        const id = fbEncodeId(item && item.id != null ? item.id : 'auto_' + i);
+        nouveau[id] = JSON.stringify(item);
+        positions[id] = i;
+      });
+    }else{
+      Object.keys(valeur || {}).forEach(k => {
+        nouveau[fbEncodeId(k)] = JSON.stringify(valeur[k]);
+      });
+    }
+
+    const ancien = _fbSnapshot[cle] || {};
+    const aEcrire = Object.keys(nouveau).filter(id => ancien[id] !== nouveau[id]);
+    const aEffacer = Object.keys(ancien).filter(id => !(id in nouveau));
+
+    for(const id of aEcrire){
+      await fbEcrireDocument(collection, id, JSON.parse(nouveau[id]), positions[id]);
+    }
+    for(const id of aEffacer){
+      await fbSupprimerDocument(collection, id);
+    }
+
+    _fbSnapshot[cle] = nouveau;
+    fbSignalerEnLigne();
+
+  }catch(e){
+    console.error('[Firestore] écriture ' + cle + ' échouée :', e.message);
+    fbSignalerHorsLigne();
+    if(typeof showToast === 'function'){
+      showToast("Enregistrement impossible — vérifiez votre connexion");
+    }
+  }
+}
+
 
 async function initData(){
   let stored = await safeGet('products', true);
@@ -1167,96 +1468,17 @@ function scrollToId(e,id){ if(e) e.preventDefault(); document.getElementById(id)
 function goHome(e){ if(e) e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); closeAll(); }
 
 /* ================= PRODUCT GRID ================= */
-function flagEmoji(code){
-  return code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
-}
-const COUNTRY_LIST = [
-  ['AF',"Afghanistan"],['ZA',"Afrique du Sud"],['AL',"Albanie"],['DZ',"Algérie"],['DE',"Allemagne"],
-  ['AD',"Andorre"],['AO',"Angola"],['AG',"Antigua-et-Barbuda"],['SA',"Arabie saoudite"],['AR',"Argentine"],
-  ['AM',"Arménie"],['AU',"Australie"],['AT',"Autriche"],['AZ',"Azerbaïdjan"],['BS',"Bahamas"],
-  ['BH',"Bahreïn"],['BD',"Bangladesh"],['BB',"Barbade"],['BE',"Belgique"],['BZ',"Belize"],
-  ['BJ',"Bénin"],['BT',"Bhoutan"],['BY',"Biélorussie"],['MM',"Birmanie"],['BO',"Bolivie"],
-  ['BA',"Bosnie-Herzégovine"],['BW',"Botswana"],['BR',"Brésil"],['BN',"Brunei"],['BG',"Bulgarie"],
-  ['BF',"Burkina Faso"],['BI',"Burundi"],['KH',"Cambodge"],['CM',"Cameroun"],['CA',"Canada"],
-  ['CV',"Cap-Vert"],['CL',"Chili"],['CN',"Chine"],['CY',"Chypre"],['CO',"Colombie"],
-  ['KM',"Comores"],['CG',"Congo"],['CD',"Congo (RDC)"],['KR',"Corée du Sud"],['KP',"Corée du Nord"],
-  ['CR',"Costa Rica"],['CI',"Côte d'Ivoire"],['HR',"Croatie"],['CU',"Cuba"],['DK',"Danemark"],
-  ['DJ',"Djibouti"],['EG',"Égypte"],['AE',"Émirats arabes unis"],['EC',"Équateur"],['ER',"Érythrée"],
-  ['ES',"Espagne"],['EE',"Estonie"],['SZ',"Eswatini"],['US',"États-Unis"],['ET',"Éthiopie"],
-  ['FJ',"Fidji"],['FI',"Finlande"],['FR',"France"],['GA',"Gabon"],['GM',"Gambie"],
-  ['GE',"Géorgie"],['GH',"Ghana"],['GR',"Grèce"],['GD',"Grenade"],['GT',"Guatemala"],
-  ['GN',"Guinée"],['GW',"Guinée-Bissau"],['GQ',"Guinée équatoriale"],['GY',"Guyana"],['HT',"Haïti"],
-  ['HN',"Honduras"],['HU',"Hongrie"],['IN',"Inde"],['ID',"Indonésie"],['IQ',"Irak"],
-  ['IR',"Iran"],['IE',"Irlande"],['IS',"Islande"],['IL',"Israël"],['IT',"Italie"],
-  ['JM',"Jamaïque"],['JP',"Japon"],['JO',"Jordanie"],['KZ',"Kazakhstan"],['KE',"Kenya"],
-  ['KG',"Kirghizistan"],['KI',"Kiribati"],['KW',"Koweït"],['LA',"Laos"],['LS',"Lesotho"],
-  ['LV',"Lettonie"],['LB',"Liban"],['LR',"Liberia"],['LY',"Libye"],['LI',"Liechtenstein"],
-  ['LT',"Lituanie"],['LU',"Luxembourg"],['MK',"Macédoine du Nord"],['MG',"Madagascar"],['MY',"Malaisie"],
-  ['MW',"Malawi"],['MV',"Maldives"],['ML',"Mali"],['MT',"Malte"],['MA',"Maroc"],
-  ['MU',"Maurice"],['MR',"Mauritanie"],['MX',"Mexique"],['FM',"Micronésie"],['MD',"Moldavie"],
-  ['MC',"Monaco"],['MN',"Mongolie"],['ME',"Monténégro"],['MZ',"Mozambique"],['NA',"Namibie"],
-  ['NR',"Nauru"],['NP',"Népal"],['NI',"Nicaragua"],['NE',"Niger"],['NG',"Nigeria"],
-  ['NO',"Norvège"],['NZ',"Nouvelle-Zélande"],['OM',"Oman"],['UG',"Ouganda"],['UZ',"Ouzbékistan"],
-  ['PK',"Pakistan"],['PW',"Palaos"],['PA',"Panama"],['PG',"Papouasie-Nouvelle-Guinée"],['PY',"Paraguay"],
-  ['NL',"Pays-Bas"],['PE',"Pérou"],['PH',"Philippines"],['PL',"Pologne"],['PT',"Portugal"],
-  ['QA',"Qatar"],['CF',"République centrafricaine"],['DO',"République dominicaine"],['CZ',"République tchèque"],['RO',"Roumanie"],
-  ['GB',"Royaume-Uni"],['RU',"Russie"],['RW',"Rwanda"],['KN',"Saint-Christophe-et-Niévès"],['SM',"Saint-Marin"],
-  ['VC',"Saint-Vincent-et-les-Grenadines"],['LC',"Sainte-Lucie"],['SB',"Salomon"],['SV',"Salvador"],['WS',"Samoa"],
-  ['ST',"Sao Tomé-et-Principe"],['SN',"Sénégal"],['RS',"Serbie"],['SC',"Seychelles"],['SL',"Sierra Leone"],
-  ['SG',"Singapour"],['SK',"Slovaquie"],['SI',"Slovénie"],['SO',"Somalie"],['SD',"Soudan"],
-  ['SS',"Soudan du Sud"],['LK',"Sri Lanka"],['SE',"Suède"],['CH',"Suisse"],['SR',"Suriname"],
-  ['SY',"Syrie"],['TJ',"Tadjikistan"],['TZ',"Tanzanie"],['TD',"Tchad"],['TH',"Thaïlande"],
-  ['TL',"Timor oriental"],['TG',"Togo"],['TO',"Tonga"],['TT',"Trinité-et-Tobago"],['TN',"Tunisie"],
-  ['TM',"Turkménistan"],['TR',"Turquie"],['TV',"Tuvalu"],['UA',"Ukraine"],['UY',"Uruguay"],
-  ['VU',"Vanuatu"],['VA',"Vatican"],['VE',"Venezuela"],['VN',"Vietnam"],['YE',"Yémen"],
-  ['ZM',"Zambie"],['ZW',"Zimbabwe"],
-];
-const COUNTRIES = {};
-COUNTRY_LIST.forEach(([code,name])=>{ COUNTRIES[code] = {name, flag:flagEmoji(code)}; });
+const COUNTRIES = {
+  CN:{name:'Chine', flag:'🇨🇳'}, GN:{name:'Guinée', flag:'🇬🇳'}, CI:{name:"Côte d'Ivoire", flag:'🇨🇮'},
+  SN:{name:'Sénégal', flag:'🇸🇳'}, ML:{name:'Mali', flag:'🇲🇱'}, NG:{name:'Nigeria', flag:'🇳🇬'},
+  FR:{name:'France', flag:'🇫🇷'}, AE:{name:'Émirats arabes unis', flag:'🇦🇪'}, TR:{name:'Turquie', flag:'🇹🇷'},
+  US:{name:'États-Unis', flag:'🇺🇸'}, MA:{name:'Maroc', flag:'🇲🇦'}, GH:{name:'Ghana', flag:'🇬🇭'},
+};
 function countryBadge(code){
   const c = COUNTRIES[code];
   if(!c) return '';
   return `<span class="country-badge">${c.flag} ${code}</span>`;
 }
-/* ================= SÉLECTEUR DE PAYS AVEC RECHERCHE ================= */
-function countryPickerHtml(fieldId, selectedCode){
-  selectedCode = selectedCode || 'GN';
-  const sel = COUNTRIES[selectedCode];
-  return `
-    <div class="country-picker" id="${fieldId}Wrap">
-      <input type="text" id="${fieldId}Input" class="country-picker-input" autocomplete="off"
-        value="${sel ? sel.flag + ' ' + sel.name : ''}"
-        oninput="filterCountryOptions('${fieldId}')" onfocus="filterCountryOptions('${fieldId}')">
-      <input type="hidden" id="${fieldId}" value="${selectedCode}">
-      <div class="country-picker-list" id="${fieldId}List"></div>
-    </div>`;
-}
-function filterCountryOptions(fieldId){
-  const input = document.getElementById(fieldId+'Input');
-  const list = document.getElementById(fieldId+'List');
-  const q = input.value.trim().toLowerCase();
-  const matches = COUNTRY_LIST.filter(([code,name])=>
-    name.toLowerCase().startsWith(q) || code.toLowerCase().startsWith(q)
-  ).slice(0,8);
-  if(matches.length===0){ list.innerHTML = `<div class="country-picker-empty">Aucun pays trouvé</div>`; }
-  else {
-    list.innerHTML = matches.map(([code,name])=>
-      `<div class="country-picker-item" onmousedown="selectCountry('${fieldId}','${code}')">${flagEmoji(code)} ${name}</div>`
-    ).join('');
-  }
-  list.classList.add('open');
-}
-function selectCountry(fieldId, code){
-  const c = COUNTRIES[code];
-  document.getElementById(fieldId).value = code;
-  document.getElementById(fieldId+'Input').value = `${c.flag} ${c.name}`;
-  document.getElementById(fieldId+'List').classList.remove('open');
-}
-document.addEventListener('click', (e)=>{
-  document.querySelectorAll('.country-picker-list.open').forEach(list=>{
-    if(!list.parentElement.contains(e.target)) list.classList.remove('open');
-  });
-});
 const CATEGORY_COLOR = {
   'Véhicules':'#E8590C', 'Électronique':'#181513', 'Mode':'#2FAE5C',
   'Maison':'#1F7A45', 'Beauté':'#FF7A29', 'Sport & Loisirs':'#8A2E12',
@@ -1991,43 +2213,37 @@ function renderSellerOverview(shop){
       </div>`).join('')}
   `;
 }
-let sellerEditProductId = null;
 function renderSellerProducts(shop){
   const myProducts = products.filter(p=>p.shopId===shop.id);
-  const editing = sellerEditProductId ? myProducts.find(p=>p.id===sellerEditProductId) : null;
   return `
-    <h4 class="display" style="font-size:15px;font-weight:500;margin-bottom:10px">${editing?'Modifier le produit':'Ajouter un produit'}</h4>
-    <div class="field"><label>Nom du produit</label><input id="spName" value="${editing?editing.name:''}" placeholder="Toyota RAV4 — Gris, ou tout autre article"></div>
-    <div class="field"><label>Finition / équipement</label><input id="spScent" value="${editing?editing.subtitle:''}" placeholder="SUV 5 places, boîte automatique"></div>
+    <h4 class="display" style="font-size:15px;font-weight:500;margin-bottom:10px">Ajouter un produit</h4>
+    <div class="field"><label>Nom du produit</label><input id="spName" placeholder="Toyota RAV4 — Gris, ou tout autre article"></div>
+    <div class="field"><label>Finition / équipement</label><input id="spScent" placeholder="SUV 5 places, boîte automatique"></div>
     <div class="field-row">
-      <div class="field"><label>Année (si applicable)</label><input id="spYear" value="${editing&&editing.year?editing.year:''}" placeholder="2020, ou laisser vide"></div>
-      <div class="field"><label>Détail (kilométrage, taille…)</label><input id="spMileage" value="${editing&&editing.mileage?editing.mileage:''}" placeholder="45 000 km, taille M, etc."></div>
+      <div class="field"><label>Année (si applicable)</label><input id="spYear" placeholder="2020, ou laisser vide"></div>
+      <div class="field"><label>Détail (kilométrage, taille…)</label><input id="spMileage" placeholder="45 000 km, taille M, etc."></div>
     </div>
     <div class="field-row">
-      <div class="field"><label>Prix (€)</label><input id="spPrice" type="number" min="1" step="50" value="${editing?editing.price:''}" placeholder="9500"></div>
-      <div class="field"><label>Unités disponibles</label><input id="spStock" type="number" min="0" value="${editing?editing.stock:''}" placeholder="1"></div>
+      <div class="field"><label>Prix (€)</label><input id="spPrice" type="number" min="1" step="50" placeholder="9500"></div>
+      <div class="field"><label>Unités disponibles</label><input id="spStock" type="number" min="0" placeholder="1"></div>
     </div>
     <div class="field"><label>Marque</label>
       <select id="spCat" style="width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;font-size:14px;font-family:inherit;background:#fff">
-        ${CATEGORIES.map(c=>`<option value="${c}" ${(editing?editing.category===c:c===shop.category)?'selected':''}>${c}</option>`).join('')}
+        ${CATEGORIES.map(c=>`<option value="${c}" ${c===shop.category?'selected':''}>${c}</option>`).join('')}
       </select>
     </div>
     <div class="field"><label>Pays où se trouve le produit</label>
-      ${countryPickerHtml('spCountry', editing&&editing.country ? editing.country : 'CN')}
+      <select id="spCountry" style="width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;font-size:14px;font-family:inherit;background:#fff">
+        ${Object.entries(COUNTRIES).map(([code,c])=>`<option value="${code}">${c.flag} ${c.name}</option>`).join('')}
+      </select>
     </div>
-    <div class="field"><label>Description</label><input id="spDesc" value="${editing?editing.desc:''}" placeholder="État général, options, historique"></div>
+    <div class="field"><label>Description</label><input id="spDesc" placeholder="État général, options, historique"></div>
     <div class="field">
-      <label>Photo du produit${editing?' (laisser vide pour garder la photo actuelle)':''}</label>
+      <label>Photo du produit</label>
       <input id="spPhoto" type="file" accept="image/*" onchange="previewUploadedPhoto(this,'spPhotoPreview')" style="width:100%;padding:9px;border:1px solid var(--line);border-radius:3px;font-size:13px;background:#fff">
-      <div id="spPhotoPreview" style="margin-top:8px">${editing&&editing.images&&editing.images[0] ? `<img src="${productImg(editing)}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--line)">` : ''}</div>
+      <div id="spPhotoPreview" style="margin-top:8px"></div>
     </div>
-    ${editing
-      ? `<div style="display:flex;gap:8px">
-          <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveSellerProductEdit()">Enregistrer les modifications</button>
-          <button class="btn btn-outline" style="padding:11px 16px" onclick="sellerEditProductId=null;renderSeller();">Annuler</button>
-        </div>`
-      : `<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSellerProduct()">Ajouter à ma boutique</button>`
-    }
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSellerProduct()">Ajouter à ma boutique</button>
 
     <h4 class="display" style="font-size:15px;font-weight:500;margin:24px 0 12px">Mes produits (${myProducts.length})</h4>
     ${myProducts.length===0 ? `<p class="mini-note">Aucun produit publié pour l'instant.</p>` :
@@ -2037,43 +2253,10 @@ function renderSellerProducts(shop){
             <div style="font-size:13px;font-weight:500">${p.name}</div>
             <div style="font-size:11.5px;color:var(--text-muted)">${money(p.price)} · ${p.stock} unité${p.stock>1?'s':''}${p.stock>0&&p.stock<=2?' <span style="color:var(--ember)">⚠ stock faible</span>':''}</div>
           </div>
-          <div style="display:flex;gap:10px">
-            <a class="remove-link" style="color:var(--amber)" onclick="sellerEditProductId='${p.id}';renderSeller();">modifier</a>
-            <a class="remove-link" onclick="removeSellerProduct('${p.id}')">retirer</a>
-          </div>
+          <a class="remove-link" onclick="removeSellerProduct('${p.id}')">retirer</a>
         </div>`).join('')
     }
   `;
-}
-async function saveSellerProductEdit(){
-  const p = products.find(x=>x.id===sellerEditProductId);
-  if(!p) return;
-  const name = document.getElementById('spName').value.trim();
-  const subtitle = document.getElementById('spScent').value.trim();
-  const yearVal = document.getElementById('spYear').value.trim();
-  const mileageVal = document.getElementById('spMileage').value.trim();
-  const price = parseFloat(document.getElementById('spPrice').value);
-  const stock = parseInt(document.getElementById('spStock').value);
-  const category = document.getElementById('spCat').value;
-  const country = document.getElementById('spCountry').value;
-  const desc = document.getElementById('spDesc').value.trim() || subtitle;
-  const photoInput = document.getElementById('spPhoto');
-  if(!name||!subtitle||!price||isNaN(stock)){ showToast("Merci de compléter tous les champs"); return; }
-  if(photoInput && photoInput.files && photoInput.files[0]){
-    try{ p.images = [await compressImageFile(photoInput.files[0])]; }
-    catch(e){ showToast("Impossible de lire la nouvelle photo, ancienne conservée"); }
-  }
-  p.name = name; p.subtitle = subtitle; p.price = price; p.stock = stock;
-  p.category = category; p.country = country; p.desc = desc;
-  if(yearVal) p.year = yearVal; else delete p.year;
-  if(mileageVal) p.mileage = mileageVal; else delete p.mileage;
-  await safeSet('products', products, true);
-  sellerEditProductId = null;
-  renderSeller();
-  renderProducts();
-  renderCategories();
-  renderShopsDirectory();
-  showToast(`${name} mis à jour`);
 }
 function renderSellerOrders(shop){
   const myOrders = shopOrders(shop.id);
@@ -2495,7 +2678,7 @@ function renderAdmin(){
   if(!isAdmin){
     if(title) title.textContent = 'Administration';
     body.innerHTML = `
-      <p class="mini-note" style="margin-bottom:16px">Compte réservé à l'équipe Africa Vision. <span class="badge-sim">démo</span> Code : <code>${ADMIN_CODE}</code></p>
+      <p class="mini-note" style="margin-bottom:16px">Accès réservé à la direction Africa Vision.</p>
       <div class="field"><label>Votre nom</label><input id="adminNameInput" placeholder="Ex. Fatou, responsable plateforme"></div>
       <div class="field"><label>Code d'accès</label><input id="adminCode" type="password" placeholder="Code administrateur"></div>
       <button class="btn btn-dark" style="width:100%;justify-content:center" onclick="checkAdmin()">Se connecter</button>
@@ -2649,79 +2832,44 @@ async function adminDeleteCategory(name){
   renderCategories();
   showToast(`Catégorie "${name}" supprimée`);
 }
-let adminEditProductId = null;
 function renderAdminProducts(){
-  const editing = adminEditProductId ? products.find(p=>p.id===adminEditProductId) : null;
   const list = products.length===0 ? `<p class="mini-note">Aucun produit au catalogue.</p>` : products.map(p=>`
     <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px">
       <div>
         <div style="font-size:13px;font-weight:500">${p.name}</div>
         <div style="font-size:11.5px;color:var(--text-muted)">${p.category} · ${money(p.price)} · stock ${p.stock} · ${p.shopName}</div>
       </div>
-      <div style="display:flex;gap:10px">
-        <a class="remove-link" style="color:var(--amber)" onclick="adminEditProductId='${p.id}';renderAdmin();">modifier</a>
-        <a class="remove-link" onclick="adminDeleteProduct('${p.id}')">supprimer</a>
-      </div>
+      <a class="remove-link" onclick="adminDeleteProduct('${p.id}')">supprimer</a>
     </div>`).join('');
   return `
-    <h4 class="display" style="font-size:15px;font-weight:500;margin-bottom:10px">${editing?'Modifier le produit':'Ajouter un produit'}</h4>
-    <div class="field"><label>Nom du produit</label><input id="apName" value="${editing?editing.name:''}" placeholder="Nom de l'article"></div>
-    <div class="field"><label>Sous-titre / détail</label><input id="apSubtitle" value="${editing?editing.subtitle:''}" placeholder="Courte description technique"></div>
+    <h4 class="display" style="font-size:15px;font-weight:500;margin-bottom:10px">Ajouter un produit</h4>
+    <div class="field"><label>Nom du produit</label><input id="apName" placeholder="Nom de l'article"></div>
+    <div class="field"><label>Sous-titre / détail</label><input id="apSubtitle" placeholder="Courte description technique"></div>
     <div class="field-row">
-      <div class="field"><label>Prix (€)</label><input id="apPrice" type="number" min="1" step="1" value="${editing?editing.price:''}" placeholder="25"></div>
-      <div class="field"><label>Stock</label><input id="apStock" type="number" min="0" value="${editing?editing.stock:''}" placeholder="10"></div>
+      <div class="field"><label>Prix (€)</label><input id="apPrice" type="number" min="1" step="1" placeholder="25"></div>
+      <div class="field"><label>Stock</label><input id="apStock" type="number" min="0" placeholder="10"></div>
     </div>
     <div class="field"><label>Catégorie</label>
       <select id="apCat" style="width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;font-size:14px;font-family:inherit;background:#fff">
-        ${CATEGORIES.map(c=>`<option value="${c}" ${editing&&editing.category===c?'selected':''}>${c}</option>`).join('')}
+        ${CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('')}
       </select>
     </div>
     <div class="field"><label>Pays où se trouve le produit</label>
-      ${countryPickerHtml('apCountry', editing&&editing.country ? editing.country : 'CN')}
+      <select id="apCountry" style="width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;font-size:14px;font-family:inherit;background:#fff">
+        ${Object.entries(COUNTRIES).map(([code,c])=>`<option value="${code}">${c.flag} ${c.name}</option>`).join('')}
+      </select>
     </div>
-    <div class="field"><label>Description</label><input id="apDesc" value="${editing?editing.desc:''}" placeholder="Description complète du produit"></div>
+    <div class="field"><label>Description</label><input id="apDesc" placeholder="Description complète du produit"></div>
     <div class="field">
-      <label>Photo du produit${editing?' (laisser vide pour garder la photo actuelle)':''}</label>
+      <label>Photo du produit</label>
       <input id="apPhoto" type="file" accept="image/*" onchange="previewUploadedPhoto(this,'apPhotoPreview')" style="width:100%;padding:9px;border:1px solid var(--line);border-radius:3px;font-size:13px;background:#fff">
-      <div id="apPhotoPreview" style="margin-top:8px">${editing&&editing.images&&editing.images[0] ? `<img src="${productImg(editing)}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--line)">` : ''}</div>
+      <div id="apPhotoPreview" style="margin-top:8px"></div>
     </div>
-    ${editing
-      ? `<div style="display:flex;gap:8px;margin-bottom:22px">
-          <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveAdminProductEdit()">Enregistrer les modifications</button>
-          <button class="btn btn-outline" style="padding:11px 16px" onclick="adminEditProductId=null;renderAdmin();">Annuler</button>
-        </div>`
-      : `<button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:22px" onclick="adminAddProduct()">Publier l'article</button>`
-    }
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:22px" onclick="adminAddProduct()">Publier l'article</button>
 
     <h4 class="display" style="font-size:15px;font-weight:500;margin-bottom:12px">Catalogue (${products.length})</h4>
     ${list}
   `;
-}
-async function saveAdminProductEdit(){
-  const p = products.find(x=>x.id===adminEditProductId);
-  if(!p) return;
-  const name = document.getElementById('apName').value.trim();
-  const subtitle = document.getElementById('apSubtitle').value.trim();
-  const price = parseFloat(document.getElementById('apPrice').value);
-  const stock = parseInt(document.getElementById('apStock').value);
-  const category = document.getElementById('apCat').value;
-  const country = document.getElementById('apCountry').value;
-  const desc = document.getElementById('apDesc').value.trim() || subtitle;
-  const photoInput = document.getElementById('apPhoto');
-  if(!name||!subtitle||!price||isNaN(stock)){ showToast("Merci de compléter tous les champs"); return; }
-  if(photoInput && photoInput.files && photoInput.files[0]){
-    try{ p.images = [await compressImageFile(photoInput.files[0])]; }
-    catch(e){ showToast("Impossible de lire la nouvelle photo, ancienne conservée"); }
-  }
-  p.name = name; p.subtitle = subtitle; p.price = price; p.stock = stock;
-  p.category = category; p.country = country; p.desc = desc;
-  await safeSet('products', products, true);
-  adminEditProductId = null;
-  renderAdmin();
-  renderProducts();
-  renderCategories();
-  renderShopsDirectory();
-  showToast(`${name} mis à jour`);
 }
 const ORDER_STATUSES = ['En attente','En préparation','Expédiée','Livrée'];
 function renderAdminWithdrawals(){
@@ -3092,12 +3240,119 @@ function closeAll(){
   document.getElementById('pmodal').classList.remove('open');
 }
 
-initData();
+/* Démarrage : on attend Firestore avant d'afficher la boutique */
+(async function demarrer(){
+  const ecran = document.getElementById('bootScreen');
+  const message = document.getElementById('bootMsg');
+  const lent = setTimeout(function(){
+    if(message) message.textContent = "Connexion lente — chargement en cours…";
+  }, 6000);
 
-/* Accès admin discret — invisible pour les visiteurs : #admin dans l'URL, ou Ctrl+Alt+A */
+  try{
+    await initData();
+  }catch(e){
+    console.error('[Démarrage] échec :', e);
+    if(message) message.textContent = "Impossible de charger les données. Vérifiez votre connexion, puis rechargez la page.";
+    clearTimeout(lent);
+    return;
+  }
+
+  clearTimeout(lent);
+  if(ecran){
+    ecran.style.opacity = '0';
+    setTimeout(function(){ ecran.remove(); }, 400);
+  }
+})();
+
+/* =====================================================================
+   ACCÈS ADMINISTRATION — ENTRÉE DISCRÈTE
+   ---------------------------------------------------------------------
+   Le bouton « Espace admin » n'apparaît pas dans l'interface.
+   Quatre moyens d'ouvrir la console de direction :
+
+     1. #admin à la fin de l'adresse
+     2. ?direction=avm à la fin de l'adresse
+     3. SEPT APPUIS sur « Conakry · Guinée » en bas de page (téléphone)
+     4. Ctrl + Alt + A au clavier (ordinateur)
+
+   Pour changer le mot de passe : cherchez const ADMIN_CODE plus haut.
+   ===================================================================== */
 if(window.location.hash === '#admin'){ openAdmin(); }
+
+window.addEventListener('load', function(){
+  if(new URLSearchParams(location.search).get('direction') === 'avm'){
+    setTimeout(openAdmin, 300);
+  }
+});
+
 document.addEventListener('keydown', (e)=>{
-  if(e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a'){ openAdmin(); }
+  if(e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a'){ e.preventDefault(); openAdmin(); }
+});
+
+(function(){
+  let coups = 0, minuteur = null;
+  window.addEventListener('load', function(){
+    const cible = document.getElementById('footSecret');
+    if(!cible) return;
+    cible.addEventListener('click', function(){
+      coups++;
+      clearTimeout(minuteur);
+      minuteur = setTimeout(function(){ coups = 0; }, 2500);
+      if(coups >= 7){ coups = 0; openAdmin(); }
+    });
+  });
+})();
+
+/* =====================================================================
+   APPLICATION INSTALLABLE (PWA)
+   ===================================================================== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js')
+      .then(function(reg){
+        console.log('[PWA] Service worker actif');
+        reg.addEventListener('updatefound', function(){
+          const nw = reg.installing;
+          nw.addEventListener('statechange', function(){
+            if(nw.state === 'installed' && navigator.serviceWorker.controller){
+              showToast("Nouvelle version disponible — rechargez la page");
+            }
+          });
+        });
+      })
+      .catch(function(e){ console.warn('[PWA] Échec du service worker :', e); });
+  });
+}
+
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredInstall = e;
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'inline-flex';
+});
+async function installApp(){
+  if(!deferredInstall){
+    showToast("Sur iPhone : bouton Partager, puis « Sur l'écran d'accueil »");
+    return;
+  }
+  deferredInstall.prompt();
+  const res = await deferredInstall.userChoice;
+  if(res.outcome === 'accepted') showToast("Africa Vision installée sur votre téléphone");
+  deferredInstall = null;
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'none';
+}
+window.addEventListener('appinstalled', function(){
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'none';
+});
+
+/* Raccourcis du manifest : ?open=cart et ?open=seller */
+window.addEventListener('load', function(){
+  const open = new URLSearchParams(location.search).get('open');
+  if(open === 'cart')   setTimeout(openCart, 400);
+  if(open === 'seller') setTimeout(openSeller, 400);
 });
 </script>
 </body>
