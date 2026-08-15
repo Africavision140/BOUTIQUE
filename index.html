@@ -1,9 +1,114 @@
 <!DOCTYPE html>
+<!--
+=========================================================================
+  AFRICA VISION — MARKETPLACE
+  VERSION : v2026.08.15-e
+=========================================================================
+
+  ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
+
+  Ce fichier contient plusieurs couches techniques indispensables.
+  Elles sont invisibles à l'écran, mais si elles disparaissent,
+  LE SITE CESSE DE FONCTIONNER EN LIGNE.
+
+  NE JAMAIS SUPPRIMER :
+
+  1. LA COUCHE FIRESTORE  (chercher : FB_PROJECT)
+     Les fonctions safeGet et safeSet enregistrent les données dans
+     Firebase, projet africa-vision-3b38f. Sans elles, plus aucun
+     produit, commande ou boutique n'est conservé.
+     ❌ Ne jamais revenir à window.storage : cela ne marche que dans
+        l'aperçu de Claude, jamais sur un vrai site.
+
+  2. LE BLOC RÉFÉRENCEMENT DU HEAD  (chercher : og:image)
+     Description Google, aperçu WhatsApp, fiche entreprise.
+
+  3. L'APPLICATION INSTALLABLE  (chercher : installBtn, serviceWorker)
+     Permet d'installer le site sur le téléphone.
+     Fichiers liés : manifest.json et sw.js.
+
+  4. L'ÉCRAN DE CHARGEMENT  (chercher : bootScreen)
+     Évite la page blanche pendant que Firestore répond.
+
+  5. L'ACCÈS ADMIN DISCRET  (chercher : footSecret)
+     Aucun bouton admin ne doit apparaître dans l'interface.
+
+  COMMENT TRAVAILLER À DEUX SUR CE FICHIER :
+  Toujours envoyer CE fichier à l'assistant avant de demander une
+  modification. Ne jamais repartir d'une version plus ancienne.
+  La version en service est toujours celle de :
+  https://github.com/Africavision140/BOUTIQUE
+
+  À CHAQUE NOUVELLE VERSION : changer le numéro ci-dessus (ligne 4)
+  ET dans sw.js (chercher : CACHE_VERSION).
+=========================================================================
+-->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Africa Vision — Marketplace</title>
+<title>Africa Vision — Marketplace en Guinée | Véhicules, électronique, mode</title>
+
+<!-- ===================================================================
+     Adresse actuelle : africavision140.github.io/BOUTIQUE/
+     Le jour où vous prenez un vrai domaine, remplacez cette adresse
+     partout dans ce bloc, puis dans sitemap.xml et robots.txt.
+     =================================================================== -->
+
+<!-- ---------- Référencement Google ---------- -->
+<meta name="description" content="Marketplace en Guinée : véhicules importés, électronique, mode, maison, beauté et sport. Vendeurs vérifiés, paiement Orange Money et MTN MoMo, livraison à Conakry.">
+<meta name="keywords" content="marketplace Guinée, voiture occasion Conakry, achat en ligne Guinée, vendeur en ligne Conakry, véhicule importé Chine Guinée">
+<meta name="author" content="Africa Vision">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://africavision140.github.io/BOUTIQUE/">
+
+<!-- ---------- Partage WhatsApp / Facebook ---------- -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Africa Vision">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Africa Vision — Marketplace en Guinée">
+<meta property="og:description" content="Véhicules, électronique, mode, maison, beauté et sport. Vendeurs vérifiés, livraison à Conakry.">
+<meta property="og:url" content="https://africavision140.github.io/BOUTIQUE/">
+<meta property="og:image" content="https://africavision140.github.io/BOUTIQUE/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Africa Vision — Marketplace en Guinée">
+<meta name="twitter:description" content="Véhicules, électronique, mode, maison, beauté et sport. Vendeurs vérifiés, livraison à Conakry.">
+<meta name="twitter:image" content="https://africavision140.github.io/BOUTIQUE/og-image.jpg">
+
+<!-- ---------- Fiche entreprise pour Google ---------- -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "OnlineStore",
+  "name": "Africa Vision",
+  "description": "Marketplace multi-catégories en Guinée : véhicules, électronique, mode, maison, beauté et sport.",
+  "url": "https://africavision140.github.io/BOUTIQUE/",
+  "logo": "https://africavision140.github.io/BOUTIQUE/og-image.jpg",
+  "telephone": ["+224625813646", "+224612398318"],
+  "email": "contact@visionafrica-boutique.fr",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Sonfonia T7",
+    "addressLocality": "Conakry",
+    "addressCountry": "GN"
+  },
+  "currenciesAccepted": "GNF, EUR, USD, RMB, XOF",
+  "paymentAccepted": "Orange Money, MTN Mobile Money, Wave, Moov Money",
+  "areaServed": { "@type": "Country", "name": "Guinée" }
+}
+</script>
+
+<!-- ---------- Application installable (PWA) ---------- -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1F35">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Africa Vision">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -133,6 +238,8 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 
 .icon-btn{position:relative;display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;letter-spacing:0.02em;color:#fff;background:var(--ember);padding:9px 16px;border-radius:20px;transition:background .15s ease}
 .icon-btn:hover{background:var(--amber)}
+.icon-btn-install{background:transparent;color:var(--ember);border:1px solid var(--ember)}
+.icon-btn-install:hover{background:var(--ember);color:#fff}
 .icon-btn-admin{background:var(--ember)}
 .icon-btn-admin:hover{background:var(--amber)}
 @media(max-width:1040px){.icon-btn-admin{display:none}}
@@ -394,6 +501,19 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 .qty-btn{width:22px;height:22px;border:1px solid var(--line);border-radius:3px;font-size:13px;display:flex;align-items:center;justify-content:center}
 .qty-num{font-family:'IBM Plex Mono',monospace;font-size:13px;min-width:16px;text-align:center}
 .remove-link{font-size:11px;color:var(--text-muted);text-decoration:underline;margin-left:auto}
+/* Boutons d'action sur les lignes de produit (vendeur et admin) */
+.row-actions{display:flex;gap:8px;flex-shrink:0}
+.btn-mini{font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:4px;cursor:pointer;
+  white-space:nowrap;background:transparent;border:1px solid;transition:background .15s ease,color .15s ease;line-height:1}
+.btn-mini-edit{color:var(--ember);border-color:var(--ember)}
+.btn-mini-edit:hover{background:var(--ember);color:#fff}
+.btn-mini-del{color:#B3261E;border-color:rgba(179,38,30,0.55)}
+.btn-mini-del:hover{background:#B3261E;color:#fff}
+@media(max-width:520px){
+  .row-product{flex-direction:column;align-items:stretch !important;gap:10px}
+  .row-actions{width:100%}
+  .btn-mini{flex:1;text-align:center}
+}
 .subtotal-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;color:var(--text-muted)}
 .total-row{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .empty-note{color:var(--text-muted);font-size:14px;padding:40px 0;text-align:center}
@@ -542,6 +662,11 @@ footer li{margin-bottom:9px}
 </style>
 </head>
 <body>
+<div id="bootScreen" style="position:fixed;inset:0;z-index:9999;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .35s ease">
+  <div style="width:64px;height:64px;border:3px solid rgba(11,31,53,0.15);border-top-color:var(--ember);border-radius:50%;animation:bootspin .9s linear infinite"></div>
+  <div style="font-family:'Inter',sans-serif;font-size:14px;color:var(--text-muted);text-align:center;padding:0 24px" id="bootMsg">Chargement du catalogue…</div>
+  <style>@keyframes bootspin{to{transform:rotate(360deg)}}</style>
+</div>
 
 <div class="promo-bar">
   <div class="promo-track" id="promoTrack">
@@ -588,6 +713,10 @@ footer li{margin-bottom:9px}
       </select>
       <button class="icon-btn" onclick="openSeller()" id="sellerBtn" data-i18n="nav_seller">Espace vendeur</button>
       <button class="icon-btn" onclick="openAccount()" id="accountBtn" data-i18n="nav_account">Compte</button>
+      <button class="icon-btn icon-btn-install" id="installBtn" onclick="installApp()" style="display:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
+        <span>Installer</span>
+      </button>
       <button class="icon-btn" onclick="openCart()">
         <span data-i18n="nav_cart">Panier</span> <span class="cart-count" id="cartCount" style="display:none">0</span>
       </button>
@@ -657,7 +786,9 @@ footer li{margin-bottom:9px}
       Chaque produit est vérifié avant d'entrer en catalogue, qu'il s'agisse d'un véhicule, d'un article de mode ou d'un appareil électronique. Rien n'est publié sans contrôle préalable par notre équipe ou le vendeur partenaire.
     </p>
     <div class="contact-block">
-      <div class="contact-item"><span class="contact-icon">📞</span>+224 625 81 36 46</div>
+      <div class="contact-item"><span class="contact-icon">📞</span><a href="tel:+224625813646">+224 625 81 36 46</a></div>
+      <div class="contact-item"><span class="contact-icon">📞</span><a href="tel:+224612398318">+224 612 39 83 18</a></div>
+      <div class="contact-item"><span class="contact-icon">💬</span><a href="https://wa.me/224612398318?text=Bonjour%2C%20je%20vous%20contacte%20depuis%20le%20site%20Africa%20Vision" target="_blank" rel="noopener">WhatsApp · 612 39 83 18</a></div>
       <div class="contact-item"><span class="contact-icon">✉️</span>contact@visionafrica-boutique.fr</div>
       <div class="contact-item"><span class="contact-icon">📍</span>Sonfonia T7, Conakry, Guinée</div>
     </div>
@@ -684,7 +815,9 @@ footer li{margin-bottom:9px}
     <div>
       <h4 data-i18n="footer_contact">Contact</h4>
       <ul>
-        <li>📞 +224 625 81 36 46</li>
+        <li>📞 <a href="tel:+224625813646">+224 625 81 36 46</a></li>
+        <li>📞 <a href="tel:+224612398318">+224 612 39 83 18</a></li>
+        <li>💬 <a href="https://wa.me/224612398318" target="_blank" rel="noopener">WhatsApp · 612 39 83 18</a></li>
         <li>✉️ contact@visionafrica-boutique.fr</li>
         <li>📍 Sonfonia T7, Conakry, Guinée</li>
       </ul>
@@ -692,7 +825,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span>Paiement simulé — aucune transaction réelle</span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-e</span></span>
   </div>
 </footer>
 
@@ -1019,13 +1152,67 @@ let activeCategory = 'Toutes';
 let activeShopId = null;
 
 /* ================= STORAGE HELPERS ================= */
-async function safeGet(key, shared=false){
-  try{ const r = await window.storage.get(key, shared); return r ? JSON.parse(r.value) : null; }
-  catch(e){ return null; }
+/* =====================================================================
+   STOCKAGE — FIRESTORE (API REST, sans SDK)
+   ---------------------------------------------------------------------
+   Projet Firebase : africa-vision-3b38f
+   Toutes les collections sont préfixées « boutique_ » pour ne pas
+   entrer en conflit avec vos autres plateformes du même projet.
+
+   RÉPARTITION DES DONNÉES
+   -----------------------
+   • Données PARTAGÉES (shared = true)  -> Firestore, visibles par tous
+       produits, boutiques, commandes, avis, messages, réglages
+   • Données PRIVÉES (shared = false)   -> mémoire du navigateur
+       panier, compte client, langue, devise
+     (elles restent sur l'appareil du visiteur, comme avant)
+
+   POURQUOI UN DOCUMENT PAR ARTICLE
+   --------------------------------
+   Firestore limite chaque document à 1 Mo. Une photo compressée pèse
+   environ 80 Ko : un seul document contenant tous les produits serait
+   dépassé dès la vingtième fiche. Chaque produit, boutique, commande
+   ou conversation a donc son propre document.
+
+   ÉCRITURES INTELLIGENTES
+   -----------------------
+   Le code appelle safeSet('products', products) avec la liste entière
+   après chaque modification. Plutôt que de réécrire les 45 fiches,
+   on compare avec la version précédente et on n'envoie que ce qui a
+   réellement changé. Sur une connexion lente, la différence est nette.
+
+   MODE HORS LIGNE
+   ---------------
+   Chaque lecture réussie est copiée dans le navigateur. Si le réseau
+   tombe, le site affiche la dernière version connue au lieu d'une page
+   vide, et prévient l'utilisateur.
+   ===================================================================== */
+
+const FB_PROJECT = 'africa-vision-3b38f';
+const FB_BASE = 'https://firestore.googleapis.com/v1/projects/' + FB_PROJECT +
+                '/databases/(default)/documents';
+
+/* Clés stockées comme une liste d'objets possédant un champ id */
+const FB_LISTES = ['products', 'shops', 'allOrders', 'withdrawals', 'broadcasts'];
+/* Clés stockées comme un dictionnaire : { identifiant : contenu } */
+const FB_DICTS  = ['reviews', 'shopStats', 'chats'];
+/* Clés tenant dans un seul petit document */
+const FB_SIMPLE = ['commissionSettings', 'adSettings', 'videoAdSettings', 'extraCategories', 'announcements'];
+
+/* Mémoire de la dernière version écrite, pour ne renvoyer que les écarts */
+const _fbSnapshot = {};
+let _fbHorsLigne = false;
+
+/* ---------- Outils ---------- */
+function fbCollection(cle){ return 'boutique_' + cle; }
+
+/* Un identifiant de document ne tolère ni /, ni ::, ni accents.
+   On encode donc la clé d'origine en base64 compatible URL. */
+function fbEncodeId(cle){
+  const b64 = btoa(unescape(encodeURIComponent(String(cle))));
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
-async function safeSet(key, value, shared=false){
-  try{ await window.storage.set(key, JSON.stringify(value), shared); }catch(e){ console.error('storage set failed', e); }
-}
+
 
 async function initData(){
   let stored = await safeGet('products', true);
@@ -2034,14 +2221,14 @@ function renderSellerProducts(shop){
     <h4 class="display" style="font-size:15px;font-weight:500;margin:24px 0 12px">Mes produits (${myProducts.length})</h4>
     ${myProducts.length===0 ? `<p class="mini-note">Aucun produit publié pour l'instant.</p>` :
       myProducts.map(p=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px">
+        <div class="row-product" style="display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px">
           <div>
             <div style="font-size:13px;font-weight:500">${p.name}</div>
             <div style="font-size:11.5px;color:var(--text-muted)">${money(p.price)} · ${p.stock} unité${p.stock>1?'s':''}${p.stock>0&&p.stock<=2?' <span style="color:var(--ember)">⚠ stock faible</span>':''}</div>
           </div>
-          <div style="display:flex;gap:10px">
-            <a class="remove-link" style="color:var(--amber)" onclick="sellerEditProductId='${p.id}';renderSeller();">modifier</a>
-            <a class="remove-link" onclick="removeSellerProduct('${p.id}')">retirer</a>
+          <div class="row-actions">
+            <button class="btn-mini btn-mini-edit" onclick="sellerEditProductId='${p.id}';renderSeller();">✏️ Modifier</button>
+            <button class="btn-mini btn-mini-del" onclick="removeSellerProduct('${p.id}')">🗑 Supprimer</button>
           </div>
         </div>`).join('')
     }
@@ -2497,7 +2684,7 @@ function renderAdmin(){
   if(!isAdmin){
     if(title) title.textContent = 'Administration';
     body.innerHTML = `
-      <p class="mini-note" style="margin-bottom:16px">Compte réservé à l'équipe Africa Vision. <span class="badge-sim">démo</span> Code : <code>${ADMIN_CODE}</code></p>
+      <p class="mini-note" style="margin-bottom:16px">Accès réservé à la direction Africa Vision.</p>
       <div class="field"><label>Votre nom</label><input id="adminNameInput" placeholder="Ex. Fatou, responsable plateforme"></div>
       <div class="field"><label>Code d'accès</label><input id="adminCode" type="password" placeholder="Code administrateur"></div>
       <button class="btn btn-dark" style="width:100%;justify-content:center" onclick="checkAdmin()">Se connecter</button>
@@ -2655,14 +2842,14 @@ let adminEditProductId = null;
 function renderAdminProducts(){
   const editing = adminEditProductId ? products.find(p=>p.id===adminEditProductId) : null;
   const list = products.length===0 ? `<p class="mini-note">Aucun produit au catalogue.</p>` : products.map(p=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px">
+    <div class="row-product" style="display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px">
       <div>
         <div style="font-size:13px;font-weight:500">${p.name}</div>
         <div style="font-size:11.5px;color:var(--text-muted)">${p.category} · ${money(p.price)} · stock ${p.stock} · ${p.shopName}</div>
       </div>
-      <div style="display:flex;gap:10px">
-        <a class="remove-link" style="color:var(--amber)" onclick="adminEditProductId='${p.id}';renderAdmin();">modifier</a>
-        <a class="remove-link" onclick="adminDeleteProduct('${p.id}')">supprimer</a>
+      <div class="row-actions">
+        <button class="btn-mini btn-mini-edit" onclick="adminEditProductId='${p.id}';renderAdmin();">✏️ Modifier</button>
+        <button class="btn-mini btn-mini-del" onclick="adminDeleteProduct('${p.id}')">🗑 Supprimer</button>
       </div>
     </div>`).join('');
   return `
@@ -2695,10 +2882,84 @@ function renderAdminProducts(){
       : `<button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:22px" onclick="adminAddProduct()">Publier l'article</button>`
     }
 
-    <h4 class="display" style="font-size:15px;font-weight:500;margin-bottom:12px">Catalogue (${products.length})</h4>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h4 class="display" style="font-size:15px;font-weight:500;margin:0">Catalogue (${products.length})</h4>
+      <div style="display:flex;gap:14px;align-items:center">
+        <a class="remove-link" style="color:var(--sage)" onclick="exportProductsBackup()">⬇ Exporter (JSON)</a>
+        <a class="remove-link" style="color:var(--sage)" onclick="document.getElementById('importProductsFile').click()">⬆ Importer (JSON)</a>
+        <input type="file" id="importProductsFile" accept="application/json,.json" style="display:none" onchange="importProductsBackup(this)">
+      </div>
+    </div>
+    <p class="mini-note" style="margin-bottom:14px">Tous les produits sont déjà sauvegardés automatiquement dès leur ajout ou modification — l'export sert juste à garder une copie de secours téléchargeable.</p>
     ${list}
   `;
 }
+function exportProductsBackup(){
+  const data = JSON.stringify(products, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `africa-vision-catalogue-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`${products.length} produits exportés`);
+}
+/* =====================================================================
+   IMPORT DU CATALOGUE DEPUIS UN FICHIER JSON
+   ---------------------------------------------------------------------
+   Sert à récupérer les produits saisis ailleurs (par exemple dans un
+   aperçu Claude, où les données ne sont pas partagées) et à les verser
+   dans la base Firestore commune.
+
+   Les produits portant un identifiant déjà présent sont MIS À JOUR,
+   les autres sont AJOUTÉS. Aucun produit existant n'est supprimé.
+   ===================================================================== */
+async function importProductsBackup(input){
+  const fichier = input.files && input.files[0];
+  if(!fichier) return;
+  input.value = '';                       // permet de réimporter le même fichier
+
+  let liste;
+  try{
+    liste = JSON.parse(await fichier.text());
+  }catch(e){
+    showToast("Fichier illisible — ce n'est pas un export JSON valide");
+    return;
+  }
+  if(!Array.isArray(liste) || liste.length === 0){
+    showToast("Aucun produit trouvé dans ce fichier");
+    return;
+  }
+
+  /* On ne garde que les entrées ayant la forme d'un produit */
+  const valides = liste.filter(p => p && p.id && p.name && p.price !== undefined);
+  if(valides.length === 0){
+    showToast("Ce fichier ne contient pas de produits reconnaissables");
+    return;
+  }
+
+  let ajoutes = 0, misAJour = 0;
+  valides.forEach(nouveau => {
+    const i = products.findIndex(p => p.id === nouveau.id);
+    if(i >= 0){ products[i] = Object.assign({}, products[i], nouveau); misAJour++; }
+    else { products.push(nouveau); ajoutes++; }
+  });
+
+  const resume = ajoutes + " produit(s) ajouté(s), " + misAJour + " mis à jour.";
+  if(!confirm(resume + "\n\nConfirmer l'enregistrement dans la base ?")){
+    /* On annule : on relit la base pour revenir à l'état d'avant */
+    products = (await safeGet('products', true)) || products;
+    renderAdmin();
+    return;
+  }
+
+  showToast("Enregistrement en cours…");
+  await safeSet('products', products, true);
+  renderProducts(); renderCategories(); renderShops(); renderAdmin();
+  showToast(resume);
+}
+
 async function saveAdminProductEdit(){
   const p = products.find(x=>x.id===adminEditProductId);
   if(!p) return;
@@ -3094,12 +3355,121 @@ function closeAll(){
   document.getElementById('pmodal').classList.remove('open');
 }
 
-initData();
+console.log('%cAfrica Vision Marketplace v2026.08.15-e', 'font-weight:bold');
 
-/* Accès admin discret — invisible pour les visiteurs : #admin dans l'URL, ou Ctrl+Alt+A */
+/* Démarrage : on attend Firestore avant d'afficher la boutique */
+(async function demarrer(){
+  const ecran = document.getElementById('bootScreen');
+  const message = document.getElementById('bootMsg');
+  const lent = setTimeout(function(){
+    if(message) message.textContent = "Connexion lente — chargement en cours…";
+  }, 6000);
+
+  try{
+    await initData();
+  }catch(e){
+    console.error('[Démarrage] échec :', e);
+    if(message) message.textContent = "Impossible de charger les données. Vérifiez votre connexion, puis rechargez la page.";
+    clearTimeout(lent);
+    return;
+  }
+
+  clearTimeout(lent);
+  if(ecran){
+    ecran.style.opacity = '0';
+    setTimeout(function(){ ecran.remove(); }, 400);
+  }
+})();
+
+/* =====================================================================
+   ACCÈS ADMINISTRATION — ENTRÉE DISCRÈTE
+   ---------------------------------------------------------------------
+   Le bouton « Espace admin » n'apparaît pas dans l'interface.
+   Quatre moyens d'ouvrir la console de direction :
+
+     1. #admin à la fin de l'adresse
+     2. ?direction=avm à la fin de l'adresse
+     3. SEPT APPUIS sur « Conakry · Guinée » en bas de page (téléphone)
+     4. Ctrl + Alt + A au clavier (ordinateur)
+
+   Pour changer le mot de passe : cherchez const ADMIN_CODE plus haut.
+   ===================================================================== */
 if(window.location.hash === '#admin'){ openAdmin(); }
+
+window.addEventListener('load', function(){
+  if(new URLSearchParams(location.search).get('direction') === 'avm'){
+    setTimeout(openAdmin, 300);
+  }
+});
+
 document.addEventListener('keydown', (e)=>{
-  if(e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a'){ openAdmin(); }
+  if(e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a'){ e.preventDefault(); openAdmin(); }
+});
+
+(function(){
+  let coups = 0, minuteur = null;
+  window.addEventListener('load', function(){
+    const cible = document.getElementById('footSecret');
+    if(!cible) return;
+    cible.addEventListener('click', function(){
+      coups++;
+      clearTimeout(minuteur);
+      minuteur = setTimeout(function(){ coups = 0; }, 2500);
+      if(coups >= 7){ coups = 0; openAdmin(); }
+    });
+  });
+})();
+
+/* =====================================================================
+   APPLICATION INSTALLABLE (PWA)
+   ===================================================================== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js')
+      .then(function(reg){
+        console.log('[PWA] Service worker actif');
+        reg.addEventListener('updatefound', function(){
+          const nw = reg.installing;
+          nw.addEventListener('statechange', function(){
+            if(nw.state === 'installed' && navigator.serviceWorker.controller){
+              showToast("Nouvelle version disponible — rechargez la page");
+            }
+          });
+        });
+      })
+      .catch(function(e){ console.warn('[PWA] Échec du service worker :', e); });
+  });
+}
+
+let deferredInstall = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredInstall = e;
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'inline-flex';
+});
+async function installApp(){
+  if(!deferredInstall){
+    showToast("Sur iPhone : bouton Partager, puis « Sur l'écran d'accueil »");
+    return;
+  }
+  deferredInstall.prompt();
+  const res = await deferredInstall.userChoice;
+  if(res.outcome === 'accepted') showToast("Africa Vision installée sur votre téléphone");
+  deferredInstall = null;
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'none';
+}
+window.addEventListener('appinstalled', function(){
+  const btn = document.getElementById('installBtn');
+  if(btn) btn.style.display = 'none';
+});
+
+/* Raccourcis du manifest : ?open=cart et ?open=seller */
+window.addEventListener('load', function(){
+  const open = new URLSearchParams(location.search).get('open');
+  if(open === 'cart')   setTimeout(openCart, 400);
+  if(open === 'seller') setTimeout(openSeller, 400);
 });
 </script>
 </body>
