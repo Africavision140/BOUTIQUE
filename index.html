@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.15-h
+  VERSION : v2026.08.15-i
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -825,7 +825,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-h</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.15-i</span></span>
   </div>
 </footer>
 
@@ -929,6 +929,7 @@ let CATEGORIES = ['Véhicules','Électronique','Mode','Maison','Beauté','Sport 
 const ATELIER = 'Africa Vision';
 const VISION_AFRICA_HUB_ADDRESS = 'Entrepôt Africa Vision — Sonfonia T7, Conakry, Guinée';
 
+let deletedSeeds = [];
 const SEED_PRODUCTS = [
   {id:'landwind-x7-noir', name:'Land Wind X7 — Noir', subtitle:'Land Wind · SUV 5 places, boîte automatique', year:'2019', mileage:'52 000 km', price:8900, stock:1, category:'Véhicules', images:['car1-black'], country:'CN', shopId:null, shopName:ATELIER, desc:"Véhicule d'occasion contrôlé, vendu avec photos d'inventaire horodatées. Intérieur cuir, jantes alliage, climatisation. Prix et kilométrage à confirmer avant publication."},
   {id:'landwind-x7-rouge', name:'Land Wind X7 — Rouge', subtitle:'Land Wind · SUV 5 places, sellerie cuir', year:'2020', mileage:'38 000 km', price:9400, stock:1, category:'Véhicules', images:['car2-red-rear','car3-red-front'], country:'CN', shopId:null, shopName:ATELIER, desc:"Deux angles disponibles (avant/arrière). Carrosserie sans accroc visible, jantes alliage grand diamètre. Prix et kilométrage à confirmer avant publication."},
@@ -1197,7 +1198,7 @@ const FB_LISTES = ['products', 'shops', 'allOrders', 'withdrawals', 'broadcasts'
 /* Clés stockées comme un dictionnaire : { identifiant : contenu } */
 const FB_DICTS  = ['reviews', 'shopStats', 'chats'];
 /* Clés tenant dans un seul petit document */
-const FB_SIMPLE = ['commissionSettings', 'adSettings', 'videoAdSettings', 'extraCategories', 'announcements'];
+const FB_SIMPLE = ['commissionSettings', 'adSettings', 'videoAdSettings', 'extraCategories', 'announcements', 'deletedSeeds'];
 
 /* Mémoire de la dernière version écrite, pour ne renvoyer que les écarts */
 const _fbSnapshot = {};
@@ -1456,13 +1457,28 @@ async function initData(){
     }
   });
 
-  /* Produits d'origine absents de la base : on les réaffiche */
+  /* --------------------------------------------------------------------
+     Produits d'origine absents de la base.
+     Deux cas très différents :
+       • jamais enregistrés (première visite, écriture interrompue)
+         -> on les réaffiche
+       • supprimés volontairement par vous ou par un vendeur
+         -> ils doivent RESTER supprimés
+     La liste deletedSeeds mémorise les suppressions volontaires.
+     -------------------------------------------------------------------- */
+  deletedSeeds = (await safeGet('deletedSeeds', true)) || [];
+
   const presents = {};
   products.forEach(function(p){ presents[p.id] = true; });
-  const manquants = SEED_PRODUCTS.filter(function(p){ return !presents[p.id]; });
+  const manquants = SEED_PRODUCTS.filter(function(p){
+    return !presents[p.id] && deletedSeeds.indexOf(p.id) === -1;
+  });
   if(manquants.length > 0 && products.length > 0){
     products = products.concat(manquants);
     console.warn('[Catalogue] ' + manquants.length + ' produit(s) d\'origine réintégré(s)');
+  }
+  if(deletedSeeds.length > 0){
+    console.log('[Catalogue] ' + deletedSeeds.length + ' produit(s) d\'origine supprimé(s) volontairement');
   }
   if(reparees > 0) console.warn('[Catalogue] photos réparées sur ' + reparees + ' produit(s)');
   console.log('[Catalogue] ' + products.length + ' produits affichés');
@@ -2646,6 +2662,7 @@ async function addSellerProduct(){
 }
 async function removeSellerProduct(id){
   products = products.filter(p=>p.id!==id);
+  await memoriserSuppression(id);
   await safeSet('products', products, true);
   renderSeller();
   renderShopsDirectory();
@@ -3133,6 +3150,7 @@ function renderAdminProducts(){
       <div style="display:flex;gap:14px;align-items:center">
         <a class="remove-link" style="color:var(--sage)" onclick="exportProductsBackup()">⬇ Exporter (JSON)</a>
         <a class="remove-link" style="color:var(--sage)" onclick="document.getElementById('importProductsFile').click()">⬆ Importer (JSON)</a>
+        <a class="remove-link" style="color:var(--sage)" onclick="restaurerCatalogueOrigine()">↺ Restaurer l'origine</a>
         <input type="file" id="importProductsFile" accept="application/json,.json" style="display:none" onchange="importProductsBackup(this)">
       </div>
     </div>
@@ -3555,8 +3573,43 @@ async function adminAddProduct(){
   renderShopsDirectory();
   showToast(`${name} publié au catalogue`);
 }
+/* Retenir la suppression d'un produit du catalogue d'origine,
+   sinon il réapparaîtrait au prochain chargement. */
+/* Remettre les produits du catalogue d'origine qui avaient été supprimés.
+   Utile en cas de suppression par erreur. Les produits ajoutés par vous
+   ou par les vendeurs ne sont pas touchés. */
+async function restaurerCatalogueOrigine(){
+  const presents = {};
+  products.forEach(function(p){ presents[p.id] = true; });
+  const absents = SEED_PRODUCTS.filter(function(p){ return !presents[p.id]; });
+
+  if(absents.length === 0){
+    showToast("Le catalogue d'origine est déjà complet");
+    return;
+  }
+  if(!confirm("Remettre " + absents.length + " produit(s) du catalogue d'origine ?\n\nVos produits ajoutés ne seront pas touchés.")){
+    return;
+  }
+
+  products = products.concat(absents);
+  deletedSeeds = [];
+  await safeSet('deletedSeeds', deletedSeeds, true);
+  await safeSet('products', products, true);
+  renderAdmin(); renderProducts(); renderCategories(); renderShopsDirectory();
+  showToast(absents.length + " produit(s) restauré(s)");
+}
+
+async function memoriserSuppression(id){
+  const estOrigine = SEED_PRODUCTS.some(function(p){ return p.id === id; });
+  if(estOrigine && deletedSeeds.indexOf(id) === -1){
+    deletedSeeds.push(id);
+    await safeSet('deletedSeeds', deletedSeeds, true);
+  }
+}
+
 async function adminDeleteProduct(id){
   products = products.filter(p=>p.id!==id);
+  await memoriserSuppression(id);
   await safeSet('products', products, true);
   renderAdmin(); renderProducts(); renderCategories(); renderShopsDirectory();
   showToast("Produit supprimé du catalogue");
@@ -3601,7 +3654,7 @@ function closeAll(){
   document.getElementById('pmodal').classList.remove('open');
 }
 
-console.log('%cAfrica Vision Marketplace v2026.08.15-h', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.15-i', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
