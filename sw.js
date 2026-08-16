@@ -3,7 +3,7 @@
    cache-first pour les icônes et polices (rapide et stable).
    ⚠️ INCRÉMENTER CACHE_VERSION à CHAQUE mise en ligne d'une nouvelle version. */
 
-const CACHE_VERSION = 'av-v16';
+const CACHE_VERSION = 'av-v18';
 const CORE_CACHE = CACHE_VERSION + '-core';
 const ASSET_CACHE = CACHE_VERSION + '-assets';
 
@@ -68,17 +68,22 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Pages : réseau d'abord, cache en secours si hors ligne
+  // La page : affichage immédiat depuis la mémoire,
+  // mise à jour silencieuse en arrière-plan.
   event.respondWith(
-    fetch(req)
-      .then(res => {
-        const copy = res.clone();
-        caches.open(CORE_CACHE).then(c => c.put(req, copy));
-        return res;
-      })
-      .catch(() =>
-        caches.match(req).then(hit => hit || caches.match('./index.html'))
-      )
+    caches.match(req).then(enMemoire => {
+      const depuisReseau = fetch(req)
+        .then(res => {
+          if(res && res.ok){
+            const copie = res.clone();
+            caches.open(CORE_CACHE).then(c => c.put(req, copie));
+          }
+          return res;
+        })
+        .catch(() => enMemoire || caches.match('./index.html'));
+
+      return enMemoire || depuisReseau;
+    })
   );
 });
 
