@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.16-b
+  VERSION : v2026.08.16-c
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -497,6 +497,13 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 .remove-link{font-size:11px;color:var(--text-muted);text-decoration:underline;margin-left:auto}
 /* Boutons d'action sur les lignes de produit (vendeur et admin) */
 .row-actions{display:flex;gap:8px;flex-shrink:0}
+/* Boutons Facture / Reçu sur les commandes */
+.doc-actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.btn-doc{flex:1;justify-content:center;display:flex;align-items:center;gap:5px;font-size:11.5px;
+  font-weight:600;padding:9px 10px;border-radius:4px;cursor:pointer;background:transparent;
+  border:1px solid var(--ember);color:var(--ember);transition:background .15s ease,color .15s ease;
+  font-family:inherit;line-height:1}
+.btn-doc:hover{background:var(--ember);color:#fff}
 .btn-mini{font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:4px;cursor:pointer;
   white-space:nowrap;background:transparent;border:1px solid;transition:background .15s ease,color .15s ease;line-height:1}
 .btn-mini-edit{color:var(--ember);border-color:var(--ember)}
@@ -819,7 +826,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.16-b</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.16-c</span></span>
   </div>
 </footer>
 
@@ -2115,7 +2122,11 @@ function renderAccount(){
           <span class="badge-sim" style="margin-left:0">${o.paymentMethod||''}</span>
         </div>
         ${trackingTimelineHtml(o.status||'En attente')}
-        <div style="display:flex;gap:8px;margin-top:14px">
+        <div class="doc-actions">
+          <button class="btn-doc" onclick="imprimerFacture('${o.id}')">🧾 Facture</button>
+          <button class="btn-doc" onclick="imprimerRecu('${o.id}')">🖨 Reçu</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
           <a class="btn btn-outline" style="flex:1;justify-content:center;padding:7px;font-size:11px" href="${receiptMailtoLink(o)}">${t('receipt_email')}</a>
           <a class="btn btn-outline" style="flex:1;justify-content:center;padding:7px;font-size:11px" href="${receiptWhatsappLink(o)}" target="_blank" rel="noopener">${t('receipt_wa')}</a>
         </div>
@@ -2534,6 +2545,10 @@ function renderSellerOrders(shop){
       <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:11.5px;color:var(--text-muted)">
         📦 Livrer à : <strong style="color:var(--text-dark)">${VISION_AFRICA_HUB_ADDRESS}</strong>
       </div>
+      <div class="doc-actions">
+        <button class="btn-doc" onclick="imprimerFacture('${o.id}')">🧾 Facture</button>
+        <button class="btn-doc" onclick="imprimerRecu('${o.id}')">🖨 Reçu</button>
+      </div>
     </div>`).join('');
 }
 function renderSellerReviews(shop){
@@ -2659,6 +2674,284 @@ async function removeSellerProduct(id){
   renderShopsDirectory();
   renderCategories();
   renderProducts();
+}
+
+
+/* =====================================================================
+   FACTURE ET REÇU IMPRIMABLES
+   ---------------------------------------------------------------------
+   Deux documents distincts, générés à partir d'une même commande :
+
+     • FACTURE  — document comptable détaillé : numéro, coordonnées du
+                  vendeur et du client, lignes d'articles, sous-total,
+                  livraison, remise, total. À conserver et à archiver.
+
+     • REÇU     — preuve de paiement, format court, à remettre au client.
+
+   Tout est produit dans une fenêtre séparée, sans aucune bibliothèque
+   extérieure : rien à installer, fonctionne hors ligne.
+   Pour obtenir un PDF, choisir « Enregistrer au format PDF » dans la
+   destination d'impression — disponible sur PC comme sur téléphone.
+   ===================================================================== */
+
+const AV_EMETTEUR = {
+  nom: 'AFRICA VISION MULTISERVICES',
+  slogan: 'Une vision, des solutions, des résultats',
+  adresse: 'Sonfonia T7 · Madina, Commune de Matam',
+  ville: 'Conakry, République de Guinée',
+  tel: '+224 625 81 36 46 · +224 612 39 83 18',
+  email: 'contact@visionafrica-boutique.fr'
+};
+
+/* Le logo est déjà intégré à la page : on le réutilise tel quel */
+function avLogoSrc(){
+  const img = document.querySelector('.logo-mark');
+  return img ? img.src : '';
+}
+
+function avEchapper(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* Recalcule le détail d'une commande (les totaux ne sont pas stockés ligne à ligne) */
+function avDetailCommande(o){
+  const lignes = (o.items || []).map(function(i){
+    return { nom: i.name, qte: i.qty, pu: i.price, total: i.price * i.qty };
+  });
+  const sousTotal = lignes.reduce(function(s,l){ return s + l.total; }, 0);
+  const remise = o.bonusUsed ? sousTotal * LOYALTY_DISCOUNT : 0;
+  /* La livraison se déduit : total = sousTotal + livraison - remise */
+  let livraison = Math.round((o.total - sousTotal + remise) * 100) / 100;
+  if(livraison < 0) livraison = 0;
+  return { lignes: lignes, sousTotal: sousTotal, remise: remise, livraison: livraison, total: o.total };
+}
+
+function avStyleImpression(){
+  return `
+    @page{ margin:14mm }
+    *{ box-sizing:border-box; margin:0; padding:0 }
+    body{ font-family:'Helvetica Neue',Arial,sans-serif; color:#14213F; font-size:12px; line-height:1.5; padding:24px }
+    .doc{ max-width:760px; margin:0 auto }
+    .tete{ display:flex; justify-content:space-between; align-items:flex-start; gap:24px;
+           border-bottom:2px solid #0B1F35; padding-bottom:16px; margin-bottom:22px }
+    .tete img{ height:58px; width:auto }
+    .emetteur{ font-size:10.5px; line-height:1.6; color:#4A5568 }
+    .emetteur .nom{ font-size:14px; font-weight:700; color:#0B1F35; letter-spacing:.02em }
+    .emetteur .slogan{ font-style:italic; color:#8A6714; margin-bottom:6px }
+    .typedoc{ text-align:right; flex-shrink:0 }
+    .typedoc h1{ font-size:22px; letter-spacing:.08em; color:#0B1F35; text-transform:uppercase }
+    .typedoc .num{ font-family:'Courier New',monospace; font-size:13px; margin-top:4px }
+    .typedoc .date{ font-size:11px; color:#4A5568; margin-top:2px }
+    .parties{ display:flex; gap:20px; margin-bottom:22px }
+    .partie{ flex:1; border:1px solid #D8DEE8; border-radius:4px; padding:12px 14px }
+    .partie .lbl{ font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; color:#8A6714;
+                  font-weight:700; margin-bottom:6px }
+    .partie .val{ font-size:11.5px; line-height:1.65 }
+    table{ width:100%; border-collapse:collapse; margin-bottom:18px }
+    thead th{ background:#0B1F35; color:#fff; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+              padding:9px 10px; text-align:left; font-weight:600 }
+    thead th.n, tbody td.n{ text-align:right }
+    tbody td{ padding:9px 10px; border-bottom:1px solid #E4E8EF; font-size:11.5px }
+    tbody tr:nth-child(even){ background:#F7F9FC }
+    .totaux{ margin-left:auto; width:280px }
+    .totaux div{ display:flex; justify-content:space-between; padding:6px 10px; font-size:12px }
+    .totaux .remise{ color:#1F7A45 }
+    .totaux .final{ background:#0B1F35; color:#fff; font-weight:700; font-size:14px;
+                    padding:11px 10px; border-radius:3px; margin-top:5px }
+    .paiement{ margin-top:20px; border:1px solid #D8DEE8; border-radius:4px; padding:12px 14px; font-size:11.5px }
+    .paiement .lbl{ font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; color:#8A6714;
+                    font-weight:700; margin-bottom:5px }
+    .cachet{ margin-top:26px; display:flex; justify-content:space-between; gap:30px }
+    .cachet div{ flex:1; border-top:1px solid #9AA5B5; padding-top:6px; font-size:10px; color:#4A5568 }
+    .pied{ margin-top:26px; padding-top:12px; border-top:1px solid #E4E8EF;
+           font-size:9.5px; color:#6B7688; text-align:center; line-height:1.7 }
+    .barre{ position:fixed; top:0; left:0; right:0; background:#0B1F35; padding:11px;
+            display:flex; gap:10px; justify-content:center }
+    .barre button{ padding:9px 22px; font-size:13px; font-weight:600; border:none; border-radius:4px;
+                   cursor:pointer; font-family:inherit }
+    .barre .imp{ background:#2FAE5C; color:#fff }
+    .barre .fer{ background:transparent; color:#fff; border:1px solid rgba(255,255,255,.4) }
+    @media print{ .barre{ display:none } body{ padding:0 } }
+  `;
+}
+
+function avOuvrirDocument(titre, contenu){
+  const f = window.open('', '_blank');
+  if(!f){
+    showToast("Autorisez les fenêtres surgissantes pour imprimer");
+    return;
+  }
+  f.document.write(
+    '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+    '<title>' + avEchapper(titre) + '</title><style>' + avStyleImpression() + '</style></head><body>' +
+    '<div class="barre">' +
+      '<button class="imp" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button>' +
+      '<button class="fer" onclick="window.close()">Fermer</button>' +
+    '</div><div style="height:46px"></div>' +
+    contenu +
+    '</body></html>'
+  );
+  f.document.close();
+}
+
+function avEnTete(o, type, numero){
+  return `
+    <div class="tete">
+      <div style="display:flex;gap:14px;align-items:flex-start">
+        ${avLogoSrc() ? `<img src="${avLogoSrc()}" alt="Africa Vision">` : ''}
+        <div class="emetteur">
+          <div class="nom">${AV_EMETTEUR.nom}</div>
+          <div class="slogan">${AV_EMETTEUR.slogan}</div>
+          ${AV_EMETTEUR.adresse}<br>
+          ${AV_EMETTEUR.ville}<br>
+          ${AV_EMETTEUR.tel}<br>
+          ${AV_EMETTEUR.email}
+        </div>
+      </div>
+      <div class="typedoc">
+        <h1>${type}</h1>
+        <div class="num">${numero}</div>
+        <div class="date">Émis le ${avEchapper(o.date)}</div>
+      </div>
+    </div>`;
+}
+
+function avPied(){
+  return `
+    <div class="pied">
+      ${AV_EMETTEUR.nom} — ${AV_EMETTEUR.ville}<br>
+      Document généré automatiquement par la plateforme Africa Vision Marketplace.
+    </div>`;
+}
+
+/* ---------------------- FACTURE ---------------------- */
+function imprimerFacture(idCommande){
+  const o = (typeof allOrders !== 'undefined' ? allOrders : []).find(function(x){ return x.id === idCommande; })
+         || (typeof orders !== 'undefined' ? orders : []).find(function(x){ return x.id === idCommande; });
+  if(!o){ showToast("Commande introuvable"); return; }
+
+  const d = avDetailCommande(o);
+  const numero = 'FA-' + o.id;
+
+  const lignes = d.lignes.map(function(l, i){
+    return `<tr>
+      <td class="n">${i+1}</td>
+      <td>${avEchapper(l.nom)}</td>
+      <td class="n">${l.qte}</td>
+      <td class="n">${money(l.pu)}</td>
+      <td class="n">${money(l.total)}</td>
+    </tr>`;
+  }).join('');
+
+  const contenu = `
+    <div class="doc">
+      ${avEnTete(o, 'Facture', numero)}
+
+      <div class="parties">
+        <div class="partie">
+          <div class="lbl">Facturé à</div>
+          <div class="val">
+            <strong>${avEchapper(o.name)}</strong><br>
+            ${avEchapper(o.address)}<br>
+            ${avEchapper(o.phone)}<br>
+            ${avEchapper(o.email)}
+          </div>
+        </div>
+        <div class="partie">
+          <div class="lbl">Références</div>
+          <div class="val">
+            Commande n° <strong>${avEchapper(o.id)}</strong><br>
+            Date : ${avEchapper(o.date)}<br>
+            Statut : ${avEchapper(o.status || 'En attente')}<br>
+            Règlement : ${avEchapper(o.paymentMethod || '—')}
+          </div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="n" style="width:38px">#</th>
+            <th>Désignation</th>
+            <th class="n" style="width:60px">Qté</th>
+            <th class="n" style="width:110px">Prix unitaire</th>
+            <th class="n" style="width:110px">Montant</th>
+          </tr>
+        </thead>
+        <tbody>${lignes}</tbody>
+      </table>
+
+      <div class="totaux">
+        <div><span>Sous-total</span><span>${money(d.sousTotal)}</span></div>
+        <div><span>Livraison</span><span>${d.livraison > 0 ? money(d.livraison) : 'Offerte'}</span></div>
+        ${d.remise > 0 ? `<div class="remise"><span>Remise fidélité</span><span>− ${money(d.remise)}</span></div>` : ''}
+        <div class="final"><span>TOTAL À PAYER</span><span>${money(d.total)}</span></div>
+      </div>
+
+      <div class="paiement">
+        <div class="lbl">Mode de règlement</div>
+        ${avEchapper(o.paymentMethod || '—')}
+      </div>
+
+      <div class="cachet">
+        <div>Le client<br><br><br></div>
+        <div>Pour Africa Vision Multiservices<br><br><br></div>
+      </div>
+
+      ${avPied()}
+    </div>`;
+
+  avOuvrirDocument('Facture ' + numero + ' — Africa Vision', contenu);
+}
+
+/* ---------------------- REÇU ---------------------- */
+function imprimerRecu(idCommande){
+  const o = (typeof allOrders !== 'undefined' ? allOrders : []).find(function(x){ return x.id === idCommande; })
+         || (typeof orders !== 'undefined' ? orders : []).find(function(x){ return x.id === idCommande; });
+  if(!o){ showToast("Commande introuvable"); return; }
+
+  const d = avDetailCommande(o);
+  const numero = 'RC-' + o.id;
+
+  const lignes = d.lignes.map(function(l){
+    return `<tr><td>${avEchapper(l.nom)}</td><td class="n">${l.qte}</td><td class="n">${money(l.total)}</td></tr>`;
+  }).join('');
+
+  const contenu = `
+    <div class="doc" style="max-width:520px">
+      ${avEnTete(o, 'Reçu', numero)}
+
+      <div class="partie" style="margin-bottom:18px">
+        <div class="lbl">Reçu de</div>
+        <div class="val"><strong>${avEchapper(o.name)}</strong> — ${avEchapper(o.phone)}</div>
+      </div>
+
+      <table>
+        <thead><tr><th>Article</th><th class="n" style="width:50px">Qté</th><th class="n" style="width:110px">Montant</th></tr></thead>
+        <tbody>${lignes}</tbody>
+      </table>
+
+      <div class="totaux" style="width:100%">
+        ${d.livraison > 0 ? `<div><span>Livraison</span><span>${money(d.livraison)}</span></div>` : ''}
+        ${d.remise > 0 ? `<div class="remise"><span>Remise fidélité</span><span>− ${money(d.remise)}</span></div>` : ''}
+        <div class="final"><span>SOMME REÇUE</span><span>${money(d.total)}</span></div>
+      </div>
+
+      <div class="paiement">
+        <div class="lbl">Réglé par</div>
+        ${avEchapper(o.paymentMethod || '—')} — le ${avEchapper(o.date)}
+      </div>
+
+      <div class="cachet">
+        <div>Signature et cachet<br><br><br></div>
+      </div>
+
+      ${avPied()}
+    </div>`;
+
+  avOuvrirDocument('Reçu ' + numero + ' — Africa Vision', contenu);
 }
 
 /* ================= CHECKOUT ================= */
@@ -3290,6 +3583,10 @@ function renderAdminOrders(){
       <button class="btn btn-outline" style="padding:7px 12px;font-size:11.5px;margin-top:8px" onclick="advanceOrderStatus('${o.id}')">
         Marquer « ${ORDER_STATUSES[nextIdx]} »
       </button>
+      <div class="doc-actions">
+        <button class="btn-doc" onclick="imprimerFacture('${o.id}')">🧾 Facture</button>
+        <button class="btn-doc" onclick="imprimerRecu('${o.id}')">🖨 Reçu</button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -3737,7 +4034,7 @@ document.addEventListener('visibilitychange', function(){
 });
 window.addEventListener('online', function(){ verifierMisesAJour(true); });
 
-console.log('%cAfrica Vision Marketplace v2026.08.16-b', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.16-c', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
