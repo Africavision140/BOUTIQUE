@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.16-c
+  VERSION : v2026.08.17-a
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -671,11 +671,11 @@ footer li{margin-bottom:9px}
 
 <div class="promo-bar">
   <div class="promo-track" id="promoTrack">
-    <span>🔥 Jusqu'à -40% sur une sélection de produits cette semaine</span>
+    <span>🚗 Véhicules importés de Chine — arrivage régulier</span>
     <span>🚚 Livraison rapide dans tout le pays</span>
     <span>✅ Produits vérifiés avant publication</span>
     <span>💳 Paiement sécurisé à la livraison ou en ligne</span>
-    <span>🔥 Jusqu'à -40% sur une sélection de produits cette semaine</span>
+    <span>🚗 Véhicules importés de Chine — arrivage régulier</span>
     <span>🚚 Livraison rapide dans tout le pays</span>
     <span>✅ Produits vérifiés avant publication</span>
     <span>💳 Paiement sécurisé à la livraison ou en ligne</span>
@@ -826,7 +826,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.16-c</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.17-a</span></span>
   </div>
 </footer>
 
@@ -1505,7 +1505,7 @@ async function initData(){
   adSettings = (await safeGet('adSettings', true)) || {productId:null, headline:'', videoUrl:null};
   videoAdSettings = (await safeGet('videoAdSettings', true)) || {videoUrl:null, label:'', title:'', ctaText:'', ctaProductId:null};
   announcements = (await safeGet('announcements', true)) || [
-    "🔥 Jusqu'à -40% sur une sélection de produits cette semaine",
+    "🚗 Véhicules importés de Chine — arrivage régulier",
     "🚚 Livraison rapide dans tout le pays",
     "✅ Produits vérifiés avant publication",
     "💳 Paiement sécurisé à la livraison ou en ligne",
@@ -3076,6 +3076,13 @@ function renderCheckout(){
       </div>
       ${trackingTimelineHtml(lastOrder.status)}
       <div style="margin-top:20px">
+        <h4 class="display" style="font-size:14px;font-weight:500;margin-bottom:10px">Vos documents</h4>
+        <p class="mini-note" style="margin-bottom:12px">À imprimer ou à enregistrer en PDF pour les envoyer par WhatsApp.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px">
+          <button class="btn-doc" onclick="imprimerFacture('${lastOrder.id}')">🧾 Facture</button>
+          <button class="btn-doc" onclick="imprimerRecu('${lastOrder.id}')">🖨 Reçu</button>
+        </div>
+
         <h4 class="display" style="font-size:14px;font-weight:500;margin-bottom:10px">${t('receipt_resend')}</h4>
         <p class="mini-note" style="margin-bottom:12px">Si l'appli ne s'est pas ouverte automatiquement, utilisez ces boutons.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -4034,7 +4041,7 @@ document.addEventListener('visibilitychange', function(){
 });
 window.addEventListener('online', function(){ verifierMisesAJour(true); });
 
-console.log('%cAfrica Vision Marketplace v2026.08.16-c', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.17-a', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
