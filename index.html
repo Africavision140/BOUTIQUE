@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.20-a
+  VERSION : v2026.08.20-b
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -180,6 +180,13 @@ nav{display:flex;align-items:center;gap:14px;font-size:15.5px;flex-shrink:0;font
   border-radius:20px;background:var(--ember);color:#fff;flex-shrink:0;cursor:pointer;border:none;
   transition:background .15s ease}
 .burger-btn:hover{background:var(--amber)}
+/* Le menu de navigation s'ouvre à GAUCHE, du côté du bouton ☰,
+   contrairement au panier et au compte qui viennent de la droite. */
+.drawer-menu{left:0;right:auto;transform:translateX(-100%)}
+.drawer-menu.open{transform:translateX(0)}
+/* En arabe, la lecture va de droite à gauche : le menu suit */
+html[dir="rtl"] .drawer-menu{left:auto;right:0;transform:translateX(100%)}
+html[dir="rtl"] .drawer-menu.open{transform:translateX(0)}
 /* Contenu du menu latéral */
 .drawer-menu .menu-item{display:flex;align-items:center;gap:14px;padding:15px 4px;font-size:15.5px;
   font-weight:500;color:var(--text-dark);border-bottom:1px solid var(--line);cursor:pointer;
@@ -840,7 +847,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.20-a</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.20-b</span></span>
   </div>
 </footer>
 
@@ -4086,7 +4093,7 @@ document.addEventListener('visibilitychange', function(){
 });
 window.addEventListener('online', function(){ verifierMisesAJour(true); });
 
-console.log('%cAfrica Vision Marketplace v2026.08.20-a', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.20-b', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
