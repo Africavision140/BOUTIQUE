@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.20-b
+  VERSION : v2026.08.20-c
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -180,13 +180,6 @@ nav{display:flex;align-items:center;gap:14px;font-size:15.5px;flex-shrink:0;font
   border-radius:20px;background:var(--ember);color:#fff;flex-shrink:0;cursor:pointer;border:none;
   transition:background .15s ease}
 .burger-btn:hover{background:var(--amber)}
-/* Le menu de navigation s'ouvre à GAUCHE, du côté du bouton ☰,
-   contrairement au panier et au compte qui viennent de la droite. */
-.drawer-menu{left:0;right:auto;transform:translateX(-100%)}
-.drawer-menu.open{transform:translateX(0)}
-/* En arabe, la lecture va de droite à gauche : le menu suit */
-html[dir="rtl"] .drawer-menu{left:auto;right:0;transform:translateX(100%)}
-html[dir="rtl"] .drawer-menu.open{transform:translateX(0)}
 /* Contenu du menu latéral */
 .drawer-menu .menu-item{display:flex;align-items:center;gap:14px;padding:15px 4px;font-size:15.5px;
   font-weight:500;color:var(--text-dark);border-bottom:1px solid var(--line);cursor:pointer;
@@ -206,10 +199,6 @@ html[dir="rtl"] .drawer-menu.open{transform:translateX(0)}
   .icon-btn{font-size:12.5px;padding:8px 12px}
   .currency-select{font-size:11.5px;padding:7px 8px}
   .burger-btn{width:36px;height:36px}
-}
-/* Sur téléphone, le menu latéral occupe presque tout l'écran */
-@media(max-width:520px){
-  .drawer-menu{width:88vw}
 }
 
 /* Search */
@@ -474,6 +463,17 @@ html[dir="rtl"] .drawer-menu.open{transform:translateX(0)}
   transform:translateX(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;
 }
 .drawer.open{transform:translateX(0)}
+
+/* Le menu de navigation s'ouvre à GAUCHE, du côté du bouton ☰,
+   contrairement au panier et au compte qui viennent de la droite.
+   Ces règles doivent rester APRÈS .drawer, sinon elles sont ignorées. */
+aside.drawer.drawer-menu{left:0;right:auto;transform:translateX(-100%)}
+aside.drawer.drawer-menu.open{transform:translateX(0)}
+/* En arabe la page se lit de droite à gauche : le menu suit */
+html[dir="rtl"] aside.drawer.drawer-menu{left:auto;right:0;transform:translateX(100%)}
+html[dir="rtl"] aside.drawer.drawer-menu.open{transform:translateX(0)}
+/* Sur téléphone, le menu occupe presque tout l'écran */
+@media(max-width:520px){ aside.drawer.drawer-menu{width:88vw} }
 .drawer-head{padding:22px 26px;border-bottom:3px solid var(--amber);display:flex;justify-content:space-between;align-items:center}
 .drawer-head h3{font-family:'Fraunces',serif;font-size:20px;font-weight:500}
 .close-x{font-size:20px;color:var(--text-muted);line-height:1}
@@ -847,7 +847,7 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.20-b</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.20-c</span></span>
   </div>
 </footer>
 
@@ -4093,7 +4093,7 @@ document.addEventListener('visibilitychange', function(){
 });
 window.addEventListener('online', function(){ verifierMisesAJour(true); });
 
-console.log('%cAfrica Vision Marketplace v2026.08.20-b', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.20-c', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
