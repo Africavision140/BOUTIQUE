@@ -2,7 +2,7 @@
 <!--
 =========================================================================
   AFRICA VISION — MARKETPLACE
-  VERSION : v2026.08.17-a
+  VERSION : v2026.08.20-a
 =========================================================================
 
   ⚠️ À LIRE AVANT TOUTE MODIFICATION (humain ou assistant IA)
@@ -174,7 +174,19 @@ header{
 .logo{font-family:'Fraunces',serif;font-weight:700;font-size:26px;letter-spacing:0.2px;display:flex;align-items:center;gap:10px;flex-shrink:0;white-space:nowrap;color:var(--ember)}
 .logo-mark{width:40px;height:40px;flex-shrink:0;border-radius:8px;box-shadow:0 2px 6px rgba(24,21,19,0.25);object-fit:cover}
 .logo .flame{width:12px;height:16px;display:inline-block}
-nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font-weight:500;flex-wrap:wrap;row-gap:10px}
+nav{display:flex;align-items:center;gap:14px;font-size:15.5px;flex-shrink:0;font-weight:500;flex-wrap:wrap;row-gap:10px}
+/* Bouton d'ouverture du menu latéral */
+.burger-btn{display:flex;align-items:center;justify-content:center;width:40px;height:40px;
+  border-radius:20px;background:var(--ember);color:#fff;flex-shrink:0;cursor:pointer;border:none;
+  transition:background .15s ease}
+.burger-btn:hover{background:var(--amber)}
+/* Contenu du menu latéral */
+.drawer-menu .menu-item{display:flex;align-items:center;gap:14px;padding:15px 4px;font-size:15.5px;
+  font-weight:500;color:var(--text-dark);border-bottom:1px solid var(--line);cursor:pointer;
+  text-decoration:none;transition:color .15s ease}
+.drawer-menu .menu-item:hover{color:var(--ember)}
+.drawer-menu .menu-ico{font-size:19px;width:26px;text-align:center;flex-shrink:0}
+.drawer-menu .menu-sep{height:14px}
 .nav-links{display:flex;gap:26px}
 .nav-links a{
   color:#fff;background:var(--ember);transition:background .15s ease;
@@ -183,9 +195,14 @@ nav{display:flex;align-items:center;gap:28px;font-size:15.5px;flex-shrink:0;font
 .nav-links a:hover{background:var(--amber)}
 @media(max-width:920px){.nav-links{display:none}}
 @media(max-width:640px){
-  nav{gap:8px}
+  nav{gap:7px}
   .icon-btn{font-size:12.5px;padding:8px 12px}
   .currency-select{font-size:11.5px;padding:7px 8px}
+  .burger-btn{width:36px;height:36px}
+}
+/* Sur téléphone, le menu latéral occupe presque tout l'écran */
+@media(max-width:520px){
+  .drawer-menu{width:88vw}
 }
 
 /* Search */
@@ -695,10 +712,9 @@ footer li{margin-bottom:9px}
       <div class="search-results" id="searchResults"></div>
     </div>
     <nav>
-      <div class="nav-links">
-        <a href="#shop" data-i18n="nav_shop" onclick="goHome(event)">Boutique</a>
-        <a href="#about" data-i18n="nav_about" onclick="scrollToId(event,'about')">Notre atelier</a>
-      </div>
+      <button class="burger-btn" onclick="openMenu()" aria-label="Menu" title="Menu">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <select class="currency-select" id="langSelect" onchange="setLang(this.value)">
         <option value="fr">Français</option>
         <option value="en">English</option>
@@ -712,8 +728,6 @@ footer li{margin-bottom:9px}
         <option value="GNF">GNF (FG)</option>
         <option value="FCFA">FCFA</option>
       </select>
-      <button class="icon-btn" onclick="openSeller()" id="sellerBtn" data-i18n="nav_seller">Espace vendeur</button>
-      <button class="icon-btn" onclick="openAccount()" id="accountBtn" data-i18n="nav_account">Compte</button>
       <button class="icon-btn icon-btn-install" id="installBtn" onclick="installApp()" style="display:none">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
         <span>Installer</span>
@@ -826,12 +840,42 @@ footer li{margin-bottom:9px}
   </div>
   <div class="wrap foot-bottom">
     <span>© 2026 Africa Vision. Site de démonstration.</span>
-    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.17-a</span></span>
+    <span id="footSecret" style="cursor:default">Conakry · Guinée — paiement simulé · <span style="opacity:.55">v2026.08.20-a</span></span>
   </div>
 </footer>
 
 <!-- Overlay -->
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<!-- Menu latéral : Boutique, Notre atelier, Espace vendeur, Compte -->
+<aside class="drawer drawer-menu" id="menuDrawer">
+  <div class="drawer-head">
+    <h3>Menu</h3>
+    <button onclick="closeAll()" style="font-size:20px;line-height:1">✕</button>
+  </div>
+  <div class="drawer-body">
+    <a class="menu-item" onclick="closeAll();goHome(null)">
+      <span class="menu-ico">🏪</span><span data-i18n="nav_shop">Boutique</span>
+    </a>
+    <a class="menu-item" onclick="closeAll();scrollToId(null,'about')">
+      <span class="menu-ico">🏭</span><span data-i18n="nav_about">Notre atelier</span>
+    </a>
+    <div class="menu-sep"></div>
+    <a class="menu-item" onclick="closeAll();openSeller()">
+      <span class="menu-ico">🛍️</span><span data-i18n="nav_seller">Espace vendeur</span>
+    </a>
+    <a class="menu-item" onclick="closeAll();openAccount()">
+      <span class="menu-ico">👤</span><span data-i18n="nav_account">Compte</span>
+    </a>
+    <div class="menu-sep"></div>
+    <a class="menu-item" href="https://wa.me/224612398318" target="_blank" rel="noopener">
+      <span class="menu-ico">💬</span><span>Nous contacter</span>
+    </a>
+    <p class="mini-note" style="margin-top:20px;line-height:1.6">
+      Africa Vision Multiservices<br>Sonfonia T7, Conakry<br>+224 612 39 83 18
+    </p>
+  </div>
+</aside>
 
 <!-- Cart Drawer -->
 <div class="drawer" id="cartDrawer">
@@ -3941,6 +3985,7 @@ async function suspendShop(id){
 }
 
 /* ================= DRAWER CONTROL ================= */
+function openMenu(){ closeAll(); document.getElementById('overlay').classList.add('open'); document.getElementById('menuDrawer').classList.add('open'); }
 function openCart(){ closeAll(); document.getElementById('overlay').classList.add('open'); document.getElementById('cartDrawer').classList.add('open'); renderCart(); }
 function openAccount(){ closeAll(); document.getElementById('overlay').classList.add('open'); document.getElementById('accountDrawer').classList.add('open'); renderAccount(); }
 function closeAll(){
@@ -4041,7 +4086,7 @@ document.addEventListener('visibilitychange', function(){
 });
 window.addEventListener('online', function(){ verifierMisesAJour(true); });
 
-console.log('%cAfrica Vision Marketplace v2026.08.17-a', 'font-weight:bold');
+console.log('%cAfrica Vision Marketplace v2026.08.20-a', 'font-weight:bold');
 
 /* =====================================================================
    DÉMARRAGE
